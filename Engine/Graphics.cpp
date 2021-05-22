@@ -247,6 +247,23 @@ void Graphics::DrawCircle( const Vec2& left_upper_corner, const Vec2& right_lowe
 	DrawCircle( int(center.x), int(center.y), radius.GetLenght() , c );
 }
 
+void Graphics::DrawRect( int x0, int y0, int x1, int y1, Color c )
+{
+	for( int x = x0; x <= x1; x++ )
+	{
+		for( int y = y0; y <= y1; y++ )
+		{
+			PutPixel( x, y, c );
+		}
+	}
+}
+
+void Graphics::DrawRect( const Vec2& center, int half_width, int half_height, Color c )
+{
+	const Vec2 obj = Vec2( half_width, half_height );
+	DrawRect( center - obj, center + obj, c );
+}
+
 Graphics::~Graphics()
 {
 	// free sysbuffer memory (aligned free)
