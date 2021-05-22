@@ -75,6 +75,7 @@ public:
 	}
 	void DrawRect( const Vec2& center, int half_width, int half_height, Color c );
 	void DrawLine( const Vec2& p1, const Vec2& p2, Color c );
+	void DrawTriangle( const Vec2& p1, const Vec2& p2, const Vec2& p3, Color c );
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

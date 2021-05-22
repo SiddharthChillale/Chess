@@ -277,6 +277,19 @@ void Graphics::DrawLine( const Vec2& p1, const Vec2& p2, Color c )
 	}
 }
 
+void Graphics::DrawTriangle( const Vec2& p1, const Vec2& p2, const Vec2& p3, Color c )
+{
+	const Vec2 side1 = p2 - p1;
+	const float sqr_length1 = side1.GetSqrLenght();
+	const Vec2 norm = side1.GetNormalized();
+	Vec2 start = p1;
+	while( (p2 - start).GetSqrLenght() <= sqr_length1 )
+	{
+		DrawLine( start, p3, c );
+		start += norm;
+	}
+}
+
 Graphics::~Graphics()
 {
 	// free sysbuffer memory (aligned free)
