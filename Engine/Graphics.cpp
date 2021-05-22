@@ -244,7 +244,7 @@ void Graphics::DrawCircle( const Vec2& left_upper_corner, const Vec2& right_lowe
 {
 	const Vec2 radius = (right_lower_corner - left_upper_corner) * 0.5f;
 	const Vec2 center = radius + left_upper_corner;
-	DrawCircle( int(center.x), int(center.y), radius.GetLenght() , c );
+	DrawCircle( int(center.x), int(center.y), int(radius.GetLenght()) , c );
 }
 
 void Graphics::DrawRect( int x0, int y0, int x1, int y1, Color c )
@@ -260,7 +260,7 @@ void Graphics::DrawRect( int x0, int y0, int x1, int y1, Color c )
 
 void Graphics::DrawRect( const Vec2& center, int half_width, int half_height, Color c )
 {
-	const Vec2 obj = Vec2( half_width, half_height );
+	const Vec2 obj = Vec2( float(half_width), float(half_height) );
 	DrawRect( center - obj, center + obj, c );
 }
 

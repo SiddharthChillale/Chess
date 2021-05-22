@@ -60,7 +60,7 @@ public:
 	void PutPixel( int x,int y,Color c );
 	void PutPixel( const Vec2& point, Color c )
 	{
-		PutPixel( point.x, point.y, c );
+		PutPixel( int(point.x), int(point.y), c );
 	}
 	void DrawCircle( int x, int y, int radius, Color c );
 	void DrawCircle( const Vec2& center, int radius, Color c )
@@ -71,7 +71,7 @@ public:
 	void DrawRect( int x0, int y0, int x1, int y1, Color c );
 	void DrawRect( const Vec2& left_upper, const Vec2& right_lower, Color c )
 	{
-		DrawRect( left_upper.x, left_upper.y, right_lower.x, right_lower.y, c );
+		DrawRect( int(left_upper.x), int(left_upper.y), int(right_lower.x), int(right_lower.y), c );
 	}
 	void DrawRect( const Vec2& center, int half_width, int half_height, Color c );
 	void DrawLine( const Vec2& p1, const Vec2& p2, Color c );
