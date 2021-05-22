@@ -24,6 +24,7 @@
 #include <wrl.h>
 #include "ChiliException.h"
 #include "Colors.h"
+#include "Vec2.h"
 
 class Graphics
 {
@@ -57,6 +58,12 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	void DrawCircle( int x, int y, int radius, Color c );
+	void DrawCircle( const Vec2& center, int radius, Color c )
+	{
+		DrawCircle( int( center.x ), int( center.y ), radius, c );
+	}
+	void DrawCircle( const Vec2& left_upper_corner, const Vec2& right_lower_corner, Color c );
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

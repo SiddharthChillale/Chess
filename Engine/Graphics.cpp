@@ -240,6 +240,13 @@ Graphics::Graphics( HWNDKey& key )
 		_aligned_malloc( sizeof( Color ) * Graphics::ScreenWidth * Graphics::ScreenHeight,16u ) );
 }
 
+void Graphics::DrawCircle( const Vec2& left_upper_corner, const Vec2& right_lower_corner, Color c )
+{
+	const Vec2 radius = (right_lower_corner - left_upper_corner) * 0.5f;
+	const Vec2 center = radius + left_upper_corner;
+	DrawCircle( int(center.x), int(center.y), radius.GetLenght() , c );
+}
+
 Graphics::~Graphics()
 {
 	// free sysbuffer memory (aligned free)
@@ -314,6 +321,20 @@ void Graphics::PutPixel( int x,int y,Color c )
 	assert( y >= 0 );
 	assert( y < int( Graphics::ScreenHeight ) );
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
+}
+
+void Graphics::DrawCircle( int x, int y, int radius, Color c )
+{
+	for( int i = x - radius; i <= x + radius; i++ )
+	{
+		for( int j = y - radius; j <= y + radius; j++ )
+		{
+			if( (x - i) * (x - i) + (y - j) * (y - j) <= radius * radius )
+			{
+				PutPixel( i, j, c );
+			}
+		}
+	}
 }
 
 
