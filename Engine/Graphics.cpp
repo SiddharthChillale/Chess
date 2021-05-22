@@ -264,6 +264,19 @@ void Graphics::DrawRect( const Vec2& center, int half_width, int half_height, Co
 	DrawRect( center - obj, center + obj, c );
 }
 
+void Graphics::DrawLine( const Vec2& p1, const Vec2& p2, Color c )
+{
+	const Vec2& obj = p2 - p1;
+	const Vec2& norm = obj.GetNormalized();
+	float length_sqr = obj.GetSqrLenght();
+	Vec2 start = p1;
+	while( (p1 - start).GetSqrLenght() < length_sqr )
+	{
+		PutPixel( start, c );
+		start += norm;
+	}
+}
+
 Graphics::~Graphics()
 {
 	// free sysbuffer memory (aligned free)

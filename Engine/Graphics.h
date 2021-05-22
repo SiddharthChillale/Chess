@@ -58,6 +58,10 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
+	void PutPixel( const Vec2& point, Color c )
+	{
+		PutPixel( point.x, point.y, c );
+	}
 	void DrawCircle( int x, int y, int radius, Color c );
 	void DrawCircle( const Vec2& center, int radius, Color c )
 	{
@@ -70,6 +74,7 @@ public:
 		DrawRect( left_upper.x, left_upper.y, right_lower.x, right_lower.y, c );
 	}
 	void DrawRect( const Vec2& center, int half_width, int half_height, Color c );
+	void DrawLine( const Vec2& p1, const Vec2& p2, Color c );
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
