@@ -12,6 +12,11 @@ public:
 	void Draw( Graphics& gfx, bool isSelected = false ) const;
 	static int GetDimension();
 	Location GetLocation() const;
+	bool IsFree() const;
+public:
+	void PutPiece( std::unique_ptr<Piece> in_piece );
+	void RemovePiece();
+	void MovePieceTo( Cell& nxt_pos );
 private:
 	std::unique_ptr<Piece> piece;
 	const Location loc;

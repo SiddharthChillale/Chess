@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Pawn.h"
 #include <cassert>
 
 Board::Board()
@@ -10,6 +11,8 @@ Board::Board()
 			cells.emplace_back( loc, i, j );
 		}
 	}
+
+	PutPiecesInCells();
 }
 
 Location Board::GetLocation() const
@@ -34,9 +37,32 @@ bool Board::MouseIsOnBoard( const Graphics& gfx, const Mouse& mouse ) const
 		mouse_Y >= loc.y && mouse_Y < (gfx.ScreenHeight - loc.y);
 }
 
-int Board::GetCell_idx( const Location& in_loc ) const
+Cell& Board::GetCell( int cell_dim1, int cell_dim2 )
 {
-	const Location locRelativeToBoard = in_loc - loc;
+	return cells[cell_dim1 * dimension + cell_dim2];
+}
+
+void Board::PutPiecesInCells()
+{
+	const bool isLightSide = true;
+	const bool isDarkSide = !isLightSide;
+
+	const int light_pawn_y = dimension - 2;
+	const int dark_pawn_y = 1;
+	for( int i = 0; i < dimension; i++ )
+	{
+		Cell& c_light = GetCell( i, light_pawn_y );
+		c_light.PutPiece( std::make_unique<Pawn>( c_light, isLightSide ) );
+
+		Cell& c_dark = GetCell( i, dark_pawn_y );
+		c_dark.PutPiece( std::make_unique<Pawn>( c_dark, isDarkSide ) );
+	}
+}
+
+int Board::GetCell_idx( const Mouse& mouse ) const
+{
+	const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() );
+	const Location locRelativeToBoard = mouse_loc - loc;
 	const Location cell_Idx = locRelativeToBoard / Cell::GetDimension();
 	int idx = cell_Idx.x * dimension + cell_Idx.y;
 	assert( idx >= 0 && idx < cells.size() );
@@ -48,8 +74,7 @@ void Board::PorcessInput( const Graphics& gfx, const Mouse& mouse )
 	if( isReleasedLeft && mouse.LeftIsPressed() && MouseIsOnBoard( gfx, mouse ) )
 	{
 		isReleasedLeft = false;
-		const Location mouse_loc( mouse.GetPosX(), mouse.GetPosY() );
-		const int idx = GetCell_idx( mouse_loc );
+		const int idx = GetCell_idx( mouse );
 		if( !idxCurrentCell )
 		{
 			idxCurrentCell = idx;
