@@ -38,7 +38,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	brd.PorcessInput( gfx, wnd.mouse );
+	brd.ProcessInput( gfx, wnd.mouse );
 }
 
 void Game::ComposeFrame()

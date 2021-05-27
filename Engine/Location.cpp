@@ -6,6 +6,16 @@ Location::Location( int in_x, int in_y )
 	y = in_y;
 }
 
+bool Location::operator==( const Location& rhs ) const
+{
+	return (x == rhs.x) && (y == rhs.y);
+}
+
+bool Location::operator!=( const Location& rhs ) const
+{
+	return !(*this == rhs);
+}
+
 Location Location::operator+( const Location& loc ) const
 {
 	return Location(x + loc.x, y + loc.y);

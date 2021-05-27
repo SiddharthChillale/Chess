@@ -5,14 +5,16 @@ class Location
 public:
 	Location() = default;
 	Location( int in_x, int in_y );
-	Location operator+( const Location& loc ) const;
-	Location& operator+=( const Location& loc );
-	Location operator-( const Location& loc ) const;
-	Location& operator-=( const Location& loc );
-	Location operator*( int val ) const;
-	Location& operator*=( int val );
-	Location operator/( int val ) const;
-	Location& operator/=( int val );
+	bool operator==( const Location& rhs ) const;
+	bool operator!=( const Location& rhs ) const;
+	Location operator+( const Location& rhs ) const;
+	Location& operator+=( const Location& rhs );
+	Location operator-( const Location& rhs ) const;
+	Location& operator-=( const Location& rhs );
+	Location operator*( int rhs ) const;
+	Location& operator*=( int rhs );
+	Location operator/( int rhs ) const;
+	Location& operator/=( int rhs );
 public:
 	int x;
 	int y;
