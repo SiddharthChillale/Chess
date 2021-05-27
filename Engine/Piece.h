@@ -9,7 +9,7 @@ public:
 	Piece( const class Cell& cell, bool in_isLightSide);
 	void Draw( Graphics& gfx) const;
 protected:
-	const Location* cell_loc_ptr;
+	const Cell* cell;
 	const bool isLightSide;
 	const Color c;
 	static constexpr Color lightSideColor = Color( 186, 202, 68 );

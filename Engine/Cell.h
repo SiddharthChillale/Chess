@@ -11,7 +11,7 @@ public:
 	Cell( const Location& brd_loc, int x, int y );
 	void Draw( Graphics& gfx, bool isSelected = false ) const;
 	static int GetDimension();
-	const Location* GetLocationPtr() const;
+	Location GetLocation() const;
 private:
 	std::unique_ptr<Piece> piece;
 	const Location loc;

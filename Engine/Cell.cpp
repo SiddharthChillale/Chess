@@ -19,7 +19,7 @@ int Cell::GetDimension()
 	return dimension;
 }
 
-const Location* Cell::GetLocationPtr() const
+Location Cell::GetLocation() const
 {
-	return &loc;
+	return loc;
 }
