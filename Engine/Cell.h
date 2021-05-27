@@ -8,6 +8,7 @@ class Cell
 public:
 	Cell( const Location& brd_loc, int x, int y );
 	void Draw( Graphics& gfx, bool isSelected = false ) const;
+	static int GetDimension();
 private:
 	const Location loc;
 	const Color c;

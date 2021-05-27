@@ -35,3 +35,13 @@ Location& Location::operator*=( int val )
 {
 	return *this = *this * val;
 }
+
+Location Location::operator/( int val ) const
+{
+	return Location( x / val, y / val );
+}
+
+Location& Location::operator/=( int val )
+{
+	return *this = *this / val;
+}

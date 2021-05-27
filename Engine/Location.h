@@ -11,6 +11,8 @@ public:
 	Location& operator-=( const Location& loc );
 	Location operator*( int val ) const;
 	Location& operator*=( int val );
+	Location operator/( int val ) const;
+	Location& operator/=( int val );
 public:
 	int x;
 	int y;

@@ -13,3 +13,8 @@ void Cell::Draw( Graphics& gfx, bool isSelected ) const
 	Color col = isSelected ? selectedColor : c;
 	gfx.DrawRect( loc.x + offset, loc.y + offset, loc.x + dimension - offset, loc.y + dimension - offset, col );
 }
+
+int Cell::GetDimension()
+{
+	return dimension;
+}

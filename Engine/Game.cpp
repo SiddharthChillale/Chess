@@ -38,6 +38,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	brd.PorcessInput( gfx, wnd.mouse );
 }
 
 void Game::ComposeFrame()
