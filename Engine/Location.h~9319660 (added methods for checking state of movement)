@@ -1,0 +1,16 @@
+#pragma once
+
+class Location
+{
+public:
+	Location() = default;
+	Location( int in_x, int in_y );
+	bool operator==( const Location& rhs ) const;
+	bool operator!=( const Location& rhs ) const;
+	Location operator+( const Location& rhs ) const;
+	Location operator-( const Location& rhs ) const;
+	Location operator/( int val ) const;
+public:
+	int x;
+	int y;
+};

@@ -1,0 +1,28 @@
+#pragma once
+
+#include "Graphics.h"
+#include "Location.h"
+#include "Piece.h"
+#include <memory>
+#include <optional>
+
+class Cell
+{
+public:
+	Cell( const Location& brd_loc, int i, int j);
+	void Draw( Graphics& gfx, bool selected ) const;
+	static int GetDimension();
+	const Location* GetConstLocPtr() const;
+	Location GetLocation() const;
+	bool IsFree() const;
+public:
+	std::shared_ptr<Piece> piece;
+private:
+	const Location loc;
+	const Color c;
+	static constexpr int dimension = 75;
+	static constexpr int offset = 1;
+	static constexpr Color lightColor = Color( 238, 238, 210 );
+	static constexpr Color darkColor = Color( 118, 150, 86 );
+	static constexpr Color selectedCellColor = Color( 0, 0, 255 );
+};
