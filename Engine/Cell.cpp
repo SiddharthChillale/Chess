@@ -31,7 +31,13 @@ Location Cell::GetLocation() const
 
 bool Cell::IsFree() const
 {
-	return bool(piece);
+	return bool(!piece);
+}
+
+bool Cell::PieceSide() const
+{
+	assert( piece );
+	return piece->PieceSide();
 }
 
 void Cell::PutPiece( std::unique_ptr<Piece> in_piece )

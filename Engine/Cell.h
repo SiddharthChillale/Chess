@@ -13,6 +13,7 @@ public:
 	static int GetDimension();
 	Location GetLocation() const;
 	bool IsFree() const;
+	bool PieceSide() const;
 public:
 	void PutPiece( std::unique_ptr<Piece> in_piece );
 	void RemovePiece();

@@ -16,8 +16,11 @@ public:
 	void Draw( Graphics& gfx ) const;
 	bool MouseIsOnBoard( const Graphics& gfx, const Mouse& mouse ) const;
 	int GetCell_idx( const Mouse& mouse ) const;
+	const Cell& GetConstCell( int cell_dim1, int cell_dim2 ) const;
 	Cell& GetCell( int cell_dim1, int cell_dim2 );
-	void PorcessInput( const Graphics& gfx, const Mouse& mouse );
+	void ProcessInput( const Graphics& gfx, const Mouse& mouse );
+	bool IsLightSideMove() const;
+	void SetNextSideMove();
 private:
 	void PutPiecesInCells();
 private:
@@ -26,5 +29,6 @@ private:
 	std::vector<Cell> cells;
 	std::optional<int> idxCurrentCell;
 	std::optional<int> idxTargetCell;
+	bool isLightSideMove = true;
 	bool isReleasedLeft = true;
 };

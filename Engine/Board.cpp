@@ -37,9 +37,19 @@ bool Board::MouseIsOnBoard( const Graphics& gfx, const Mouse& mouse ) const
 		mouse_Y >= loc.y && mouse_Y < (gfx.ScreenHeight - loc.y);
 }
 
+const Cell& Board::GetConstCell( int cell_dim1, int cell_dim2 ) const
+{
+	return cells[cell_dim1 * dimension + cell_dim2];
+}
+
 Cell& Board::GetCell( int cell_dim1, int cell_dim2 )
 {
 	return cells[cell_dim1 * dimension + cell_dim2];
+}
+
+void Board::SetNextSideMove()
+{
+	isLightSideMove = !isLightSideMove;
 }
 
 void Board::PutPiecesInCells()
@@ -69,7 +79,7 @@ int Board::GetCell_idx( const Mouse& mouse ) const
 	return idx;
 }
 
-void Board::PorcessInput( const Graphics& gfx, const Mouse& mouse )
+void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 {
 	if( isReleasedLeft && mouse.LeftIsPressed() && MouseIsOnBoard( gfx, mouse ) )
 	{
@@ -77,7 +87,10 @@ void Board::PorcessInput( const Graphics& gfx, const Mouse& mouse )
 		const int idx = GetCell_idx( mouse );
 		if( !idxCurrentCell )
 		{
-			idxCurrentCell = idx;
+			if( !cells[idx].IsFree() && (cells[idx].PieceSide() == isLightSideMove) )
+			{
+				idxCurrentCell = idx;
+			}
 		}
 		else if( idxCurrentCell == idx )
 		{
