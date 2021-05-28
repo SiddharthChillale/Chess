@@ -79,9 +79,9 @@ bool Pawn::IsForwardMove( const Location& move_vec ) const
 {
 	if( isLightSide )
 	{
-		return move_vec.y > 0;
+		return move_vec.y < 0;
 	}
-	return move_vec.y < 0;
+	return move_vec.y > 0;
 }
 
 bool Pawn::IsFastForwardMove( const Location& move_vec, const Cell& nxt_pos ) const
@@ -98,7 +98,7 @@ bool Pawn::IsStepForwardMove( const Location& move_vec, const Cell& nxt_pos ) co
 
 Location Pawn::GetEnPasantTarget( const Board& brd, const Location& move_vec ) const
 {
-	const Location target = brd.PixelToCellDim( cell->GetLocation() ) - Location( move_vec.x, move_vec.y * 0 );
+	const Location target = brd.PixelToCellDim( cell->GetLocation() ) + Location( move_vec.x, move_vec.y * 0 );
 	return target;
 }
 

@@ -28,7 +28,7 @@ Location Piece::GetMoveVec( const Board& brd, const Cell& cur_pos, const Cell& n
 {
 	const Location current = cur_pos.GetLocation();
 	const Location next = nxt_pos.GetLocation();
-	const Location move_vec = brd.GetLocation() + (current - next);
+	const Location move_vec = brd.GetLocation() + (next - current);
 	return brd.PixelToCellDim(move_vec);
 }
 
@@ -76,7 +76,7 @@ bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& 
 	const Location& norm_move_vec = Piece::GetNormalizedMove( move_vec );
 	const Location destination = brd.PixelToCellDim( nxt_pos.GetLocation() );
 	const Location current = brd.PixelToCellDim( cell->GetLocation() );
-	Location cur_pos = current - norm_move_vec;
+	Location cur_pos = current + norm_move_vec;
 	while( cur_pos != destination )
 	{
 		const bool isNotFree = !brd.GetConstCell( cur_pos ).IsFree();
@@ -84,7 +84,7 @@ bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& 
 		{
 			return false;
 		}
-		cur_pos -= norm_move_vec;
+		cur_pos += norm_move_vec;
 	}
 	return true;
 }
