@@ -16,42 +16,42 @@ bool Location::operator!=( const Location& rhs ) const
 	return !(*this == rhs);
 }
 
-Location Location::operator+( const Location& loc ) const
+Location Location::operator+( const Location& rhs ) const
 {
-	return Location(x + loc.x, y + loc.y);
+	return Location(x + rhs.x, y + rhs.y);
 }
 
-Location& Location::operator+=( const Location& loc )
+Location& Location::operator+=( const Location& rhs )
 {
-	return *this = *this + loc;
+	return *this = *this + rhs;
 }
 
-Location Location::operator-( const Location& loc ) const
+Location Location::operator-( const Location& rhs ) const
 {
-	return Location( x - loc.x, y - loc.y );
+	return Location( x - rhs.x, y - rhs.y );
 }
 
-Location& Location::operator-=( const Location& loc )
+Location& Location::operator-=( const Location& rhs )
 {
-	return *this = *this - loc;
+	return *this = *this - rhs;
 }
 
-Location Location::operator*( int val ) const
+Location Location::operator*( int rhs ) const
 {
-	return Location( x * val, y * val );
+	return Location( x * rhs, y * rhs );
 }
 
-Location& Location::operator*=( int val )
+Location& Location::operator*=( int rhs )
 {
-	return *this = *this * val;
+	return *this = *this * rhs;
 }
 
-Location Location::operator/( int val ) const
+Location Location::operator/( int rhs ) const
 {
-	return Location( x / val, y / val );
+	return Location( x / rhs, y / rhs );
 }
 
-Location& Location::operator/=( int val )
+Location& Location::operator/=( int rhs )
 {
-	return *this = *this / val;
+	return *this = *this / rhs;
 }

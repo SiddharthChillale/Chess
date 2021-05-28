@@ -3,7 +3,7 @@
 #include "Board.h"
 #include <cassert>
 
-Piece::Piece( const Cell& in_cell, bool in_isLightSide )
+Piece::Piece( Cell& in_cell, bool in_isLightSide )
 	:
 	cell( &in_cell ), 
 	isLightSide( in_isLightSide ),
@@ -24,29 +24,41 @@ bool Piece::PieceSide() const
 	return isLightSide;
 }
 
-bool Piece::IsEnemy( const Cell& nxt_pos ) const
+Location Piece::GetMoveVec( const Board& brd, const Cell& cur_pos, const Cell& nxt_pos )
 {
-	return isLightSide != nxt_pos.PieceSide();
+	const Location current = cur_pos.GetLocation();
+	const Location next = nxt_pos.GetLocation();
+	const Location move_vec = brd.GetLocation() + (current - next);
+	return brd.PixelToCellDim(move_vec);
 }
 
-Location Piece::GetMoveVec( const Cell& cur_pos, const Cell& nxt_pos )
+void Piece::TurnOffEnPasant()
 {
-	return nxt_pos.GetLocation() - cur_pos.GetLocation();
+	isEnPasant = false;
 }
 
 Location Piece::GetNormalizedMove( const Location& move_vec )
 {
-	assert( move_vec != Location() );
+	Location result(0,0);
+	assert( move_vec != result );
+
 	if( move_vec.x != 0 )
 	{
-		return Location( move_vec / std::abs(move_vec.x) );
+		return move_vec / abs( move_vec.x );
 	}
-	return Location( move_vec / std::abs( move_vec.y ) );
+	return move_vec / abs( move_vec.y );
+}
+
+bool Piece::IsOneCellRange( const Location& move_vec ) const
+{
+	const int abs_x = abs( move_vec.x );
+	const int abs_y = abs( move_vec.y );
+	return abs_x + abs_y <= 2;
 }
 
 bool Piece::IsDiagonal( const Location& move_vec ) const
 {
-	return std::abs(move_vec.x) == 1 && std::abs(move_vec.y) == 1;
+	return abs(move_vec.x) == 1 && abs(move_vec.y) == 1;
 }
 
 bool Piece::IsHorizontal( const Location& move_vec ) const
@@ -62,23 +74,24 @@ bool Piece::IsVertical( const Location& move_vec ) const
 bool Piece::IsLongPath( const Location& move_vec, const Cell& nxt_pos ) const
 {
 	assert( IsHorizontal( move_vec ) || IsVertical( move_vec ) || IsDiagonal( move_vec ) );
-	return std::abs( move_vec.x ) > 1 || std::abs( move_vec.y ) > 1;
+	return abs( move_vec.x ) > 1 || abs( move_vec.y ) > 1;
 }
 
 bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const
 {
 	assert( IsLongPath( move_vec, nxt_pos ) );
 	const Location& norm_move_vec = Piece::GetNormalizedMove( move_vec );
-	const Location destination = nxt_pos.GetLocation();
-	Location cur_pos = cell->GetLocation() + norm_move_vec;
+	const Location destination = brd.PixelToCellDim( nxt_pos.GetLocation() );
+	const Location current = brd.PixelToCellDim( cell->GetLocation() );
+	Location cur_pos = current - norm_move_vec;
 	while( cur_pos != destination )
 	{
-		const bool isNotFree = !brd.GetConstCell( cur_pos.x, cur_pos.y ).IsFree();
+		const bool isNotFree = !brd.GetConstCell( cur_pos ).IsFree();
 		if( isNotFree )
 		{
 			return false;
 		}
-		cur_pos += norm_move_vec;
+		cur_pos -= norm_move_vec;
 	}
 	return true;
 }
@@ -90,6 +103,14 @@ bool Piece::IsFreeCell( const Cell& nxt_pos ) const
 
 bool Piece::IsEnemyCell( const Cell& nxt_pos ) const
 {
-	assert( !IsFreeCell( nxt_pos ) );
-	return isLightSide != nxt_pos.PieceSide();
+	if( nxt_pos.IsFree() )
+	{
+		return false;
+	}
+	return PieceSide() != nxt_pos.PieceSide();
+}
+
+bool Piece::IsEnPasant() const
+{
+	return isEnPasant;
 }

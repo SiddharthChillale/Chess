@@ -6,25 +6,30 @@
 class Piece
 {
 public:
-	Piece( const class Cell& cell, bool in_isLightSide);
-	virtual void Move( Cell& cur_pos, Cell& nxt_pos ) = 0;
+	Piece( class Cell& cell, bool in_isLightSide);
+	virtual void Move( class Board& brd, const Location& move_vec, Cell& nxt_pos ) = 0;
 	void Draw( Graphics& gfx) const;
 	bool PieceSide() const;
+	bool IsEnPasant() const;
+	static Location GetMoveVec( const Board& brd, const Cell& cur_pos, const Cell& nxt_pos );
+	void TurnOffEnPasant();
 protected:
-	bool IsEnemy( const Cell& nxt_pos ) const;
-	static Location GetMoveVec( const Cell& cur_pos, const Cell& nxt_pos );
 	static Location GetNormalizedMove(const Location& move_vec );
+	bool IsOneCellRange( const Location& move_vec ) const;
 	bool IsDiagonal( const Location& move_vec ) const;
 	bool IsHorizontal( const Location& move_vec ) const;
 	bool IsVertical( const Location& move_vec ) const;
 	bool IsLongPath( const Location& move_vec, const Cell& nxt_pos ) const;
-	bool PathIsFree( const class Board& brd, const Location& move_vec, const Cell& nxt_pos ) const;
+	bool PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const;
 	bool IsFreeCell( const Cell& nxt_pos ) const;
 	bool IsEnemyCell( const Cell& nxt_pos ) const;
 protected:
-	const Cell* cell;
+	Cell* cell;
 	const bool isLightSide;
 	const Color c;
+	bool isMoved = false;
+	bool isEnPasant = false;
+	bool isAlive = true;
 	static constexpr Color lightSideColor = Color( 186, 202, 68 );
 	static constexpr Color darkSideColor = Color( 101, 67, 33 );
 };

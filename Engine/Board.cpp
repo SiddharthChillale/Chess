@@ -37,9 +37,15 @@ bool Board::MouseIsOnBoard( const Graphics& gfx, const Mouse& mouse ) const
 		mouse_Y >= loc.y && mouse_Y < (gfx.ScreenHeight - loc.y);
 }
 
-const Cell& Board::GetConstCell( int cell_dim1, int cell_dim2 ) const
+const Cell& Board::GetConstCell( const Location& cell_dim ) const
 {
-	return cells[cell_dim1 * dimension + cell_dim2];
+	return cells[cell_dim.x * dimension + cell_dim.y];
+}
+
+Location Board::PixelToCellDim( const Location& piexel_dim ) const
+{
+	const Location locRelativeToBoard = piexel_dim - loc;
+	return locRelativeToBoard / Cell::GetDimension();
 }
 
 Cell& Board::GetCell( int cell_dim1, int cell_dim2 )
@@ -50,6 +56,22 @@ Cell& Board::GetCell( int cell_dim1, int cell_dim2 )
 void Board::SetNextSideMove()
 {
 	isLightSideMove = !isLightSideMove;
+}
+
+bool Board::GetCurrentTurn() const
+{
+	return isLightSideMove;
+}
+
+void Board::DeselectTargetCell()
+{
+	idxTargetCell = {};
+}
+
+void Board::DeselectBothCells()
+{
+	idxCurrentCell = {};
+	idxTargetCell = {};
 }
 
 void Board::PutPiecesInCells()
@@ -69,11 +91,9 @@ void Board::PutPiecesInCells()
 	}
 }
 
-int Board::GetCell_idx( const Mouse& mouse ) const
+int Board::GetCell_idx( const Location& pixel_dim ) const
 {
-	const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() );
-	const Location locRelativeToBoard = mouse_loc - loc;
-	const Location cell_Idx = locRelativeToBoard / Cell::GetDimension();
+	const Location cell_Idx = PixelToCellDim( pixel_dim );
 	int idx = cell_Idx.x * dimension + cell_Idx.y;
 	assert( idx >= 0 && idx < cells.size() );
 	return idx;
@@ -84,7 +104,8 @@ void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 	if( isReleasedLeft && mouse.LeftIsPressed() && MouseIsOnBoard( gfx, mouse ) )
 	{
 		isReleasedLeft = false;
-		const int idx = GetCell_idx( mouse );
+		const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() );
+		const int idx = GetCell_idx( mouse_loc );
 		if( !idxCurrentCell )
 		{
 			if( !cells[idx].IsFree() && (cells[idx].PieceSide() == isLightSideMove) )
@@ -94,12 +115,14 @@ void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 		}
 		else if( idxCurrentCell == idx )
 		{
-			idxCurrentCell = {};
-			idxTargetCell = {};
+			DeselectBothCells();
 		}
 		else if( !idxTargetCell )
 		{
 			idxTargetCell = idx;
+			Cell& cur_pos = cells[idxCurrentCell.value()];
+			Cell& nxt_pos = cells[idxTargetCell.value()];
+			cur_pos.PerformMovement( *this, nxt_pos );
 		}
 	}
 	if( !mouse.LeftIsPressed() )

@@ -31,13 +31,29 @@ Location Cell::GetLocation() const
 
 bool Cell::IsFree() const
 {
-	return bool(!piece);
+	return !bool(piece);
 }
 
 bool Cell::PieceSide() const
 {
 	assert( piece );
 	return piece->PieceSide();
+}
+
+bool Cell::IsEnPasant() const
+{
+	return piece->IsEnPasant();
+}
+
+void Cell::turnOffEnPassant()
+{
+	piece->TurnOffEnPasant();
+}
+
+void Cell::PerformMovement( Board& brd, Cell& nxt_pos )
+{
+	const Location move_vec = Piece::GetMoveVec( brd, *this, nxt_pos );
+	piece->Move( brd, move_vec , nxt_pos );
 }
 
 void Cell::PutPiece( std::unique_ptr<Piece> in_piece )

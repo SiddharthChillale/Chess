@@ -3,8 +3,8 @@
 class Location
 {
 public:
-	Location() = default;
-	Location( int in_x, int in_y );
+	Location( int in_x = 0, int in_y = 0 );
+	Location& operator=( const Location& loc ) = default;
 	bool operator==( const Location& rhs ) const;
 	bool operator!=( const Location& rhs ) const;
 	Location operator+( const Location& rhs ) const;
