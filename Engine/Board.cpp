@@ -3,6 +3,7 @@
 #include "Bishop.h"
 #include "Rook.h"
 #include "Knight.h"
+#include "King.h"
 #include <cassert>
 
 Board::Board()
@@ -19,6 +20,7 @@ Board::Board()
 	PutBishops();
 	PutRooks();
 	PutKnights();
+	PutKings();
 }
 
 Location Board::GetLocation() const
@@ -78,6 +80,20 @@ void Board::DeselectBothCells()
 {
 	idxCurrentCell = {};
 	idxTargetCell = {};
+}
+
+void Board::PutKings()
+{
+	const bool isLightSide = true;
+	const bool isDarkSide = !isLightSide;
+	const int light_pawn_y = dimension - 1;
+	const int dark_pawn_y = 0;
+	const int pawn_x = 4;
+
+	Cell& c_light = GetCell( pawn_x, light_pawn_y );
+	c_light.PutPiece( std::make_unique<King>( c_light, isLightSide ) );
+	Cell& c_dark = GetCell( pawn_x, dark_pawn_y );
+	c_dark.PutPiece( std::make_unique<King>( c_dark, isDarkSide ) );
 }
 
 void Board::PutKnights()

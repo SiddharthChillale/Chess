@@ -53,7 +53,7 @@ bool Piece::IsOneCellRange( const Location& move_vec ) const
 {
 	const int abs_x = abs( move_vec.x );
 	const int abs_y = abs( move_vec.y );
-	return abs_x + abs_y <= 2;
+	return (abs_x < 2) && (abs_y < 2);
 }
 
 bool Piece::IsDiagonal( const Location& move_vec ) const

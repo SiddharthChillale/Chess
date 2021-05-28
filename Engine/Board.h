@@ -30,6 +30,7 @@ private:
 	void PutBishops();
 	void PutRooks();
 	void PutKnights();
+	void PutKings();
 private:
 	const Location loc = Location( 100, 0 );
 	static constexpr int dimension = 8;

@@ -148,6 +148,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Location.h" />
     <ClInclude Include="MainWindow.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Location.cpp" />
     <ClCompile Include="Main.cpp" />
