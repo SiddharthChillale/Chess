@@ -58,7 +58,7 @@ bool Piece::IsOneCellRange( const Location& move_vec ) const
 
 bool Piece::IsDiagonal( const Location& move_vec ) const
 {
-	return abs(move_vec.x) == 1 && abs(move_vec.y) == 1;
+	return abs(move_vec.x) == abs(move_vec.y);
 }
 
 bool Piece::IsHorizontal( const Location& move_vec ) const
@@ -71,15 +71,8 @@ bool Piece::IsVertical( const Location& move_vec ) const
 	return move_vec.y == 0;
 }
 
-bool Piece::IsLongPath( const Location& move_vec, const Cell& nxt_pos ) const
-{
-	assert( IsHorizontal( move_vec ) || IsVertical( move_vec ) || IsDiagonal( move_vec ) );
-	return abs( move_vec.x ) > 1 || abs( move_vec.y ) > 1;
-}
-
 bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const
 {
-	assert( IsLongPath( move_vec, nxt_pos ) );
 	const Location& norm_move_vec = Piece::GetNormalizedMove( move_vec );
 	const Location destination = brd.PixelToCellDim( nxt_pos.GetLocation() );
 	const Location current = brd.PixelToCellDim( cell->GetLocation() );

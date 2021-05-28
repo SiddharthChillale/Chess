@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Pawn.h"
+#include "Bishop.h"
 #include <cassert>
 
 Board::Board()
@@ -12,7 +13,8 @@ Board::Board()
 		}
 	}
 
-	PutPiecesInCells();
+	PutPawnsInCells();
+	PutBishopsInCells();
 }
 
 Location Board::GetLocation() const
@@ -74,7 +76,23 @@ void Board::DeselectBothCells()
 	idxTargetCell = {};
 }
 
-void Board::PutPiecesInCells()
+void Board::PutBishopsInCells()
+{
+	const bool isLightSide = true;
+	const bool isDarkSide = !isLightSide;
+	const int light_pawn_y = dimension - 1;
+	const int dark_pawn_y = 0;
+
+	for( int x = 2; x < 6; x += 3 )
+	{
+		Cell& c_light = GetCell( x, light_pawn_y );
+		c_light.PutPiece( std::make_unique<Bishop>( c_light, isLightSide ) );
+		Cell& c_dark = GetCell( x, dark_pawn_y );
+		c_dark.PutPiece( std::make_unique<Bishop>( c_dark, isDarkSide ) );
+	}
+}
+
+void Board::PutPawnsInCells()
 {
 	const bool isLightSide = true;
 	const bool isDarkSide = !isLightSide;

@@ -26,7 +26,8 @@ public:
 	void DeselectTargetCell();
 	void DeselectBothCells();
 private:
-	void PutPiecesInCells();
+	void PutPawnsInCells();
+	void PutBishopsInCells();
 private:
 	const Location loc = Location( 100, 0 );
 	static constexpr int dimension = 8;

@@ -19,7 +19,6 @@ protected:
 	bool IsDiagonal( const Location& move_vec ) const;
 	bool IsHorizontal( const Location& move_vec ) const;
 	bool IsVertical( const Location& move_vec ) const;
-	bool IsLongPath( const Location& move_vec, const Cell& nxt_pos ) const;
 	bool PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const;
 	bool IsFreeCell( const Cell& nxt_pos ) const;
 	bool IsEnemyCell( const Cell& nxt_pos ) const;
@@ -29,7 +28,6 @@ protected:
 	const Color c;
 	bool isMoved = false;
 	bool isEnPasant = false;
-	bool isAlive = true;
 	static constexpr Color lightSideColor = Color( 186, 202, 68 );
 	static constexpr Color darkSideColor = Color( 101, 67, 33 );
 };
