@@ -28,6 +28,7 @@ public:
 private:
 	void PutPawnsInCells();
 	void PutBishopsInCells();
+	void PutRooksInCells();
 private:
 	const Location loc = Location( 100, 0 );
 	static constexpr int dimension = 8;

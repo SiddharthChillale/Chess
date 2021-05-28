@@ -1,6 +1,7 @@
 #include "Board.h"
 #include "Pawn.h"
 #include "Bishop.h"
+#include "Rook.h"
 #include <cassert>
 
 Board::Board()
@@ -15,6 +16,7 @@ Board::Board()
 
 	PutPawnsInCells();
 	PutBishopsInCells();
+	PutRooksInCells();
 }
 
 Location Board::GetLocation() const
@@ -89,6 +91,22 @@ void Board::PutBishopsInCells()
 		c_light.PutPiece( std::make_unique<Bishop>( c_light, isLightSide ) );
 		Cell& c_dark = GetCell( x, dark_pawn_y );
 		c_dark.PutPiece( std::make_unique<Bishop>( c_dark, isDarkSide ) );
+	}
+}
+
+void Board::PutRooksInCells()
+{
+	const bool isLightSide = true;
+	const bool isDarkSide = !isLightSide;
+	const int light_pawn_y = dimension - 1;
+	const int dark_pawn_y = 0;
+
+	for( int x = 0; x < dimension; x += dimension - 1 )
+	{
+		Cell& c_light = GetCell( x, light_pawn_y );
+		c_light.PutPiece( std::make_unique<Rook>( c_light, isLightSide ) );
+		Cell& c_dark = GetCell( x, dark_pawn_y );
+		c_dark.PutPiece( std::make_unique<Rook>( c_dark, isDarkSide ) );
 	}
 }
 
