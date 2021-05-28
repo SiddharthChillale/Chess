@@ -4,6 +4,7 @@
 #include "Rook.h"
 #include "Knight.h"
 #include "King.h"
+#include "Queen.h"
 #include <cassert>
 
 Board::Board()
@@ -21,6 +22,7 @@ Board::Board()
 	PutRooks();
 	PutKnights();
 	PutKings();
+	PutQueens();
 }
 
 Location Board::GetLocation() const
@@ -80,6 +82,20 @@ void Board::DeselectBothCells()
 {
 	idxCurrentCell = {};
 	idxTargetCell = {};
+}
+
+void Board::PutQueens()
+{
+	const bool isLightSide = true;
+	const bool isDarkSide = !isLightSide;
+	const int light_pawn_y = dimension - 1;
+	const int dark_pawn_y = 0;
+	const int pawn_x = 3;
+
+	Cell& c_light = GetCell( pawn_x, light_pawn_y );
+	c_light.PutPiece( std::make_unique<Queen>( c_light, isLightSide ) );
+	Cell& c_dark = GetCell( pawn_x, dark_pawn_y );
+	c_dark.PutPiece( std::make_unique<Queen>( c_dark, isDarkSide ) );
 }
 
 void Board::PutKings()

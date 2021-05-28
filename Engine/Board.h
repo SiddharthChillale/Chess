@@ -31,6 +31,7 @@ private:
 	void PutRooks();
 	void PutKnights();
 	void PutKings();
+	void PutQueens();
 private:
 	const Location loc = Location( 100, 0 );
 	static constexpr int dimension = 8;

@@ -63,12 +63,12 @@ bool Piece::IsDiagonal( const Location& move_vec ) const
 
 bool Piece::IsHorizontal( const Location& move_vec ) const
 {
-	return move_vec.x == 0;
+	return move_vec.y == 0;
 }
 
 bool Piece::IsVertical( const Location& move_vec ) const
 {
-	return move_vec.y == 0;
+	return move_vec.x == 0;
 }
 
 bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const
