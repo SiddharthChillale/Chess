@@ -22,30 +22,26 @@ void Pawn::Move( Board& brd, const Location& move_vec, Cell& nxt_pos )
 		{
 			if( IsStepForwardMove( move_vec, nxt_pos ) )
 			{
-				// do step forward move
-
+				// Do step forward move
 				cell->MovePieceTo( nxt_pos );
 				cell = &nxt_pos;
 				brd.SetNextSideMove();
-				isMoved = true;
 			}
 			else if( IsFastForwardMove( move_vec, nxt_pos ) && PathIsFree( brd, move_vec, nxt_pos ) )
 			{
-				// do fast forward move
-
+				// Do fast forward move
 				isEnPasant = true;
 				cell->MovePieceTo( nxt_pos );
 				cell = &nxt_pos;
 				brd.SetNextSideMove();
-
 			}
 			else if( IsDiagonal(move_vec) )
 			{
-				const Location target = GetEnPasantTarget( move_vec );
-				if( TargetIsEnPasant(brd,target) )
+				const Location target = GetEnPasantTarget( brd, move_vec );
+				if( TargetIsEnPasant( brd, target ) )
 				{
-					// attack enPasant
-					Cell& enPasant = GetEnPasant( brd, move_vec );
+					// Attack enPasant
+					Cell& enPasant = GetEnPasant( brd, target );
 					cell->MovePieceTo( nxt_pos );
 					cell = &nxt_pos;
 					enPasant.RemovePiece();
@@ -57,20 +53,24 @@ void Pawn::Move( Board& brd, const Location& move_vec, Cell& nxt_pos )
 		{
 			if( IsEnemyCell( nxt_pos ) )
 			{
-				// attack directly
+				// Attack directly
 				cell->MovePieceTo( nxt_pos );
 				cell = &nxt_pos;
 				brd.SetNextSideMove();
 			}
 		}
 	}
-	else
-	{
-		brd.DeselectTargetCell();
-	}
-	if( currentTurn != brd.GetCurrentTurn() && (isEnPasant == true) )
+
+	brd.DeselectTargetCell();
+
+	const bool nextTurn = currentTurn != brd.GetCurrentTurn();
+	if( nextTurn && (isEnPasant && isMoved) )
 	{
 		nxt_pos.turnOffEnPassant();
+	}
+	if( nextTurn )
+	{
+		isMoved = true;
 		brd.DeselectBothCells();
 	}
 }
@@ -87,7 +87,7 @@ bool Pawn::IsForwardMove( const Location& move_vec ) const
 bool Pawn::IsFastForwardMove( const Location& move_vec, const Cell& nxt_pos ) const
 {
 	assert( IsForwardMove( move_vec ) && nxt_pos.IsFree() );
-	return  (std::abs( move_vec.y ) == 2) && (std::abs( move_vec.x ) == 0);
+	return  (std::abs( move_vec.y ) == 2) && (std::abs( move_vec.x ) == 0) && (!isMoved);
 }
 
 bool Pawn::IsStepForwardMove( const Location& move_vec, const Cell& nxt_pos ) const
@@ -96,9 +96,9 @@ bool Pawn::IsStepForwardMove( const Location& move_vec, const Cell& nxt_pos ) co
 	return (std::abs( move_vec.x ) == 0) && (std::abs( move_vec.y ) == 1);
 }
 
-Location Pawn::GetEnPasantTarget( const Location& move_vec ) const
+Location Pawn::GetEnPasantTarget( const Board& brd, const Location& move_vec ) const
 {
-	const Location target = cell->GetLocation() + Location( move_vec.x * 0, move_vec.y );
+	const Location target = brd.PixelToCellDim( cell->GetLocation() ) - Location( move_vec.x, move_vec.y * 0 );
 	return target;
 }
 
@@ -110,10 +110,9 @@ Cell& Pawn::GetEnPasant( Board& brd, const Location& move_vec )
 
 bool Pawn::TargetIsEnPasant( const Board& brd, const Location& target ) const
 {
-	const Cell& MaybeEnPasant = brd.GetConstCell( brd.PixelToCellDim( target ) );
+	const Cell& MaybeEnPasant = brd.GetConstCell( target );
 	if( !MaybeEnPasant.IsFree() &&
-		(PieceSide() != MaybeEnPasant.PieceSide()) &&
-		MaybeEnPasant.IsEnPasant() )
+		(PieceSide() != MaybeEnPasant.PieceSide()) && MaybeEnPasant.IsEnPasant() )
 	{
 		return true;
 	}

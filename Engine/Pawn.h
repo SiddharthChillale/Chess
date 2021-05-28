@@ -15,7 +15,7 @@ private:
 	bool IsFastForwardMove( const Location& move_vec, const Cell& nxt_pos ) const;
 	bool IsStepForwardMove( const Location& move_vec, const Cell& nxt_pos ) const;
 	bool IsPromotion( const Location& move_vec, const Cell& nxt_pos ) const;
-	Location GetEnPasantTarget( const Location& move_vec ) const;
+	Location GetEnPasantTarget( const Board& brd, const Location& move_vec ) const;
 	Cell& GetEnPasant( Board& brd, const Location& move_vec );
 	bool TargetIsEnPasant( const Board& brd, const Location& target ) const;
 };
