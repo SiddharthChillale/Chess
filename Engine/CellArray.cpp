@@ -1,11 +1,11 @@
 #include "CellArray.h"
+#include <cassert>
 
 CellArray::Cell::Cell( const Location& in_loc, int row_idx, int col_idx, Color in_c )
 	:
 	loc( in_loc + Location( row_idx, col_idx ) * dimension ),
 	c( in_c )
 {
-
 }
 
 CellArray:: Cell::Cell( const Location& in_loc, int row_idx, int col_idx )
@@ -63,4 +63,63 @@ void CellArray::Draw( Graphics& gfx )
 	{
 		cells[i].Draw( gfx );
 	}
+}
+
+bool CellArray::MouseIsOnArray( const Mouse& mouse ) const
+{
+	const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() );
+	const Location right_bottom = Location( dimension0, dimension1 ) * Cell::dimension;
+	return mouse_loc.x >= loc.x &&
+		mouse_loc.x <= right_bottom.x &&
+		mouse_loc.y >= loc.y &&
+		mouse_loc.y <= right_bottom.y;
+}
+
+Location CellArray::GetIdx( const Location& in_loc ) const
+{
+	const Location locRelativeToBoard = in_loc - loc;
+	return locRelativeToBoard / Cell::dimension;
+}
+
+void CellArray::SelectFirst( int row_idx, int col_idx )
+{
+	selectedFirst = &cells[row_idx * dimension0 + col_idx];
+}
+
+void CellArray::SelectSecond( int row_idx, int col_idx )
+{
+	selectedSecond = &cells[row_idx * dimension0 + col_idx];
+}
+
+void CellArray::DeselectFirst()
+{
+	selectedFirst = nullptr;
+}
+
+void CellArray::DeselectBoth()
+{
+	selectedFirst = nullptr;
+	selectedSecond = nullptr;
+}
+
+void CellArray::Cell::PutPiece( std::shared_ptr<Piece> in_piece )
+{
+	assert( !piece );
+	piece = in_piece;
+}
+
+void CellArray::Cell::RemovePiece()
+{
+	assert( piece );
+	piece = nullptr;
+}
+
+void CellArray::Cell::MovePieceTo( Cell& nxt_pos )
+{
+	assert( piece );
+	if( nxt_pos.piece )
+	{
+		nxt_pos.RemovePiece();
+	}
+	nxt_pos.piece = std::move( piece );
 }
