@@ -6,13 +6,13 @@
 class Piece
 {
 public:
-	Piece( class Cell& cell, bool in_isLightSide);
-	virtual void Move( class Board& brd, const Location& move_vec, Cell& nxt_pos ) = 0;
+	Piece( class CellArray::Cell& cell, bool in_isLightSide);
+	virtual void Move( class Board& brd, const Location& move_vec, CellArray::Cell& nxt_pos ) = 0;
 	void Draw( Graphics& gfx) const;
 	bool PieceSide() const;
 	bool IsEnPasant() const;
 	bool IsAlive() const;
-	static Location GetMoveVec( const Board& brd, const Cell& cur_pos, const Cell& nxt_pos );
+	static Location GetMoveVec( const CellArray::Cell& cur_pos, const CellArray::Cell& nxt_pos );
 	void RecordDeath();
 	void TurnOffEnPasant();
 protected:
@@ -21,11 +21,11 @@ protected:
 	bool IsDiagonal( const Location& move_vec ) const;
 	bool IsHorizontal( const Location& move_vec ) const;
 	bool IsVertical( const Location& move_vec ) const;
-	bool PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const;
-	bool IsFreeCell( const Cell& nxt_pos ) const;
-	bool IsEnemyCell( const Cell& nxt_pos ) const;
+	bool PathIsFree( const Board& brd, const Location& move_vec, const CellArray::Cell& nxt_pos ) const;
+	bool IsFreeCell( const CellArray::Cell& nxt_pos ) const;
+	bool IsEnemyCell( const CellArray::Cell& nxt_pos ) const;
 protected:
-	Cell* cell;
+	CellArray::Cell* cell;
 	const bool isLightSide;
 	const Color c;
 	bool isAlive = true;

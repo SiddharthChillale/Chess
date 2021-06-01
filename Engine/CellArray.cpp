@@ -3,30 +3,31 @@
 
 CellArray::Cell::Cell( const Location& in_loc, int row_idx, int col_idx, Color in_c )
 	:
-	loc( in_loc ),
-	c( in_c )
+	location( in_loc ),
+	color( in_c )
 {
 }
 
 void CellArray::Cell::Draw( Graphics& gfx, Color in_c ) const
 {
-	const int top_left_x = loc.x + offset;
-	const int top_left_y = loc.y + offset;
-	const int bottom_right_x = loc.x + dimension - offset;
-	const int bottom_right_y = loc.y + dimension - offset;
-	gfx.DrawRect( top_left_x, top_left_y, bottom_right_x, bottom_right_y, c );
+	const int top_left_x = location.x + offset;
+	const int top_left_y = location.y + offset;
+	const int bottom_right_x = location.x + dimension - offset;
+	const int bottom_right_y = location.y + dimension - offset;
+	gfx.DrawRect( top_left_x, top_left_y, bottom_right_x, bottom_right_y, in_c );
 }
 
 void CellArray::Cell::Draw( Graphics& gfx ) const
 {
-	Draw( gfx, c );
+	Draw( gfx, color );
 }
 
 CellArray::CellArray( const Location& in_loc, int in_dimension )
 	:
-	loc(in_loc),
-	dimension0(in_dimension),
-	dimension1(in_dimension)
+	location( in_loc ),
+	dimension0( in_dimension ),
+	dimension1( in_dimension ),
+	selectedCells( dimension0 * dimension1, nullptr )
 {
 	for( int i = 0; i < in_dimension; i++ )
 	{
@@ -41,7 +42,7 @@ CellArray::CellArray( const Location& in_loc, int in_dimension )
 
 CellArray::CellArray( const Location& in_loc, int in_dimension0, int in_dimension1, Color in_c )
 	:
-	loc( in_loc ),
+	location( in_loc ),
 	dimension0( in_dimension0 ),
 	dimension1( in_dimension1 )
 {
@@ -67,15 +68,15 @@ bool CellArray::MouseIsOnArray( const Mouse& mouse ) const
 {
 	const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() );
 	const Location right_bottom = Location( dimension0, dimension1 ) * Cell::dimension;
-	return mouse_loc.x >= loc.x &&
+	return mouse_loc.x >= location.x &&
 		mouse_loc.x <= right_bottom.x &&
-		mouse_loc.y >= loc.y &&
+		mouse_loc.y >= location.y &&
 		mouse_loc.y <= right_bottom.y;
 }
 
 Location CellArray::GetIdx( const Location& in_loc ) const
 {
-	const Location locRelativeToBoard = in_loc - loc;
+	const Location locRelativeToBoard = in_loc - location;
 	return locRelativeToBoard / Cell::dimension;
 }
 
@@ -89,25 +90,49 @@ CellArray::Cell& CellArray::operator[]( const Location& loc )
 	return cells[loc.x * dimension0 + loc.y];
 }
 
-void CellArray::SelectFirst( int row_idx, int col_idx )
+int CellArray::selectedCellsCount() const
 {
-	selectedFirst = &cells[row_idx * dimension0 + col_idx];
+	return lastSelected;
 }
 
-void CellArray::SelectSecond( int row_idx, int col_idx )
+bool CellArray::IsSelected( const Cell& cell ) const
 {
-	selectedSecond = &cells[row_idx * dimension0 + col_idx];
+	for( int i = 0; i < lastSelected; i++ )
+	{
+		if( &cells[i] == &cell )
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
-void CellArray::DeselectFirst()
+CellArray::Cell& CellArray::GetSelected( int idx )
 {
-	selectedFirst = nullptr;
+	return cells[idx];
 }
 
-void CellArray::DeselectBoth()
+void CellArray::Select( Cell& cell )
 {
-	selectedFirst = nullptr;
-	selectedSecond = nullptr;
+	assert( lastSelected < dimension0 * dimension1 );
+	selectedCells[lastSelected] = &cell;
+	lastSelected++;
+}
+
+void CellArray::DeselectLast()
+{
+	assert( lastSelected > 0 );
+	selectedCells[lastSelected] = nullptr;
+	lastSelected--;
+}
+
+void CellArray::DeselectAll()
+{
+	while( lastSelected >= 0 )
+	{
+		selectedCells[lastSelected] = nullptr;
+		lastSelected--;
+	}
 }
 
 void CellArray::Cell::PutPiece( std::shared_ptr<Piece> in_piece )
@@ -130,6 +155,12 @@ void CellArray::Cell::MovePieceTo( Cell& nxt_pos )
 		nxt_pos.RemovePiece();
 	}
 	nxt_pos.piece = std::move( piece );
+}
+
+void CellArray::Cell::PerformMovement( Cell& current, Cell& next )
+{
+	const Location move_vec = Piece::GetMoveVec( brd, *this, nxt_pos );
+	piece->Move( brd, move_vec, nxt_pos );
 }
 
 bool CellArray::Cell::IsFree() const

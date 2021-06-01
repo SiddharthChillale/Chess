@@ -43,6 +43,8 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	const Location brd_loc = Location( 100, 0 );
+	const int brd_dim = 8;
 	Board brd;
 	/********************************/
 };

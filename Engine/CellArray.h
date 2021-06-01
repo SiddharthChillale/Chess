@@ -9,7 +9,7 @@
 
 class CellArray
 {
-private:
+public:
 	class Cell
 	{
 	public:
@@ -27,11 +27,13 @@ private:
 		void PutPiece( std::shared_ptr<Piece> in_piece );
 		void RemovePiece();
 		void MovePieceTo( Cell& nxt_pos );
+
+		static void PerformMovement( Cell& current, Cell& next);
 	public:
 		static constexpr int offset = 1;
 		static constexpr int dimension = 75;
-		const Color c;
-		const Location loc;
+		const Color color;
+		const Location location;
 		std::shared_ptr<Piece> piece;
 	};
 public:
@@ -42,20 +44,22 @@ public:
 	Location GetIdx( const Location& in_loc ) const;
 	const Cell& operator[]( const Location& loc ) const;
 	Cell& operator[]( const Location& loc );
+	int selectedCellsCount() const;
 
-	void SelectFirst( int row_idx, int col_idx);
-	void SelectSecond( int row_idx, int col_idx);
-	void DeselectFirst();
-	void DeselectBoth();
+	bool IsSelected( const Cell& cell ) const;
+	Cell& GetSelected( int idx );
+	void Select( Cell& cell );
+	void DeselectLast();
+	void DeselectAll();
 public:
 	static constexpr Color lightCell = Color( 238, 238, 210 );
 	static constexpr Color darkCell = Color( 118, 150, 86 );
 	static constexpr Color selectedCell = Color( 0, 0, 255 );
 	const int dimension0;
 	const int dimension1;
-	const Location loc;
+	const Location location;
 private:
 	std::vector<Cell> cells;
-	Cell* selectedFirst;
-	Cell* selectedSecond;
+	std::vector<Cell*> selectedCells;
+	int lastSelected = 0;
 };

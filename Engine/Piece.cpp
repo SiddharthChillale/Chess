@@ -1,9 +1,9 @@
 #include "Piece.h"
-#include "Cell.h"
+#include "CellArray.h"
 #include "Board.h"
 #include <cassert>
 
-Piece::Piece( Cell& in_cell, bool in_isLightSide )
+Piece::Piece( CellArray::Cell& in_cell, bool in_isLightSide )
 	:
 	cell( &in_cell ), 
 	isLightSide( in_isLightSide ),
@@ -14,8 +14,8 @@ Piece::Piece( Cell& in_cell, bool in_isLightSide )
 
 void Piece::Draw( Graphics& gfx) const
 {
-	const int center = Cell::GetDimension() / 2;
-	const Location global_location = cell->GetLocation() + Location( center, center );
+	const int center = CellArray::Cell::dimension / 2;
+	const Location global_location = cell->location + Location( center, center );
 	gfx.DrawCircle( global_location.x, global_location.y, 25, c );
 }
 
@@ -24,12 +24,12 @@ bool Piece::PieceSide() const
 	return isLightSide;
 }
 
-Location Piece::GetMoveVec( const Board& brd, const Cell& cur_pos, const Cell& nxt_pos )
+Location Piece::GetMoveVec( const CellArray::Cell& cur_pos, const CellArray::Cell& nxt_pos )
 {
-	const Location current = cur_pos.GetLocation();
-	const Location next = nxt_pos.GetLocation();
-	const Location move_vec = brd.GetLocation() + (next - current);
-	return brd.PixelToCellDim(move_vec);
+	const Location current = cur_pos.location;
+	const Location next = nxt_pos.location;
+	const Location move_vec = (next - current) / CellArray::Cell::dimension;
+	return move_vec;
 }
 
 void Piece::RecordDeath()
@@ -76,7 +76,7 @@ bool Piece::IsVertical( const Location& move_vec ) const
 	return move_vec.x == 0;
 }
 
-bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& nxt_pos ) const
+bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const CellArray::Cell& nxt_pos ) const
 {
 	const Location& norm_move_vec = Piece::GetNormalizedMove( move_vec );
 	const Location destination = brd.PixelToCellDim( nxt_pos.GetLocation() );
@@ -94,12 +94,12 @@ bool Piece::PathIsFree( const Board& brd, const Location& move_vec, const Cell& 
 	return true;
 }
 
-bool Piece::IsFreeCell( const Cell& nxt_pos ) const
+bool Piece::IsFreeCell( const CellArray::Cell& nxt_pos ) const
 {
 	return nxt_pos.IsFree();
 }
 
-bool Piece::IsEnemyCell( const Cell& nxt_pos ) const
+bool Piece::IsEnemyCell( const CellArray::Cell& nxt_pos ) const
 {
 	if( nxt_pos.IsFree() )
 	{
