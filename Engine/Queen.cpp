@@ -22,7 +22,6 @@ void Queen::Move( class Board& brd )
 			if( next_cell.IsFree() || brd.NextIsEnemy() )
 			{
 				cell->MovePieceTo( next_cell );
-				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
 		}
@@ -33,7 +32,6 @@ void Queen::Move( class Board& brd )
 	const bool nextTurn = currentTurn != brd.GetCurrentTurn();
 	if( nextTurn )
 	{
-		isMoved = true;
 		brd.DeselectAllCells();
 	}
 }

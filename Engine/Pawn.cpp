@@ -25,7 +25,6 @@ void Pawn::Move( Board& brd )
 			{
 				// Do step forward move
 				cell->MovePieceTo( next_cell );
-				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
 			else if( brd.IsFastForwardMove( move_vec ) && brd.PathIsFree( move_vec ) )
@@ -33,7 +32,6 @@ void Pawn::Move( Board& brd )
 				// Do fast forward move
 				isEnPasant = true;
 				cell->MovePieceTo( next_cell );
-				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
 			else if( brd.IsDiagonal(move_vec) )
@@ -44,8 +42,8 @@ void Pawn::Move( Board& brd )
 					// Attack enPasant
 					Cell& enPasant = brd.GetCell( target );
 					cell->MovePieceTo( next_cell );
-					cell = &next_cell;
 					enPasant.RemovePiece();
+					enPasant.RecordDeath();
 					brd.SetNextSideMove();
 				}
 			}
@@ -56,7 +54,6 @@ void Pawn::Move( Board& brd )
 			{
 				// Attack directly
 				cell->MovePieceTo( next_cell );
-				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
 		}
@@ -71,7 +68,6 @@ void Pawn::Move( Board& brd )
 	}
 	if( nextTurn )
 	{
-		isMoved = true;
 		brd.DeselectAllCells();
 	}
 }
