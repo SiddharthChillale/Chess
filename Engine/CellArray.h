@@ -48,6 +48,7 @@ public:
 
 	bool IsSelected( const Cell& cell ) const;
 	Cell& GetSelected( int idx );
+	const Cell& GetSelected( int idx ) const;
 	void Select( Cell& cell );
 	void DeselectLast();
 	void DeselectAll();

@@ -112,6 +112,11 @@ CellArray::Cell& CellArray::GetSelected( int idx )
 	return cells[idx];
 }
 
+CellArray::Cell& CellArray::GetSelected( int idx )
+{
+	return cells[idx];
+}
+
 void CellArray::Select( Cell& cell )
 {
 	assert( lastSelected < dimension0 * dimension1 );
@@ -159,8 +164,8 @@ void CellArray::Cell::MovePieceTo( Cell& nxt_pos )
 
 void CellArray::Cell::PerformMovement( Cell& current, Cell& next )
 {
-	const Location move_vec = Piece::GetMoveVec( brd, *this, nxt_pos );
-	piece->Move( brd, move_vec, nxt_pos );
+	const Location move_vec = Piece::GetMoveVec( current, next );
+	current.piece->Move( brd, move_vec, nxt_pos );
 }
 
 bool CellArray::Cell::IsFree() const

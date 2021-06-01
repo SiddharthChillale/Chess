@@ -12,18 +12,8 @@ public:
 	bool PieceSide() const;
 	bool IsEnPasant() const;
 	bool IsAlive() const;
-	static Location GetMoveVec( const CellArray::Cell& cur_pos, const CellArray::Cell& nxt_pos );
 	void RecordDeath();
 	void TurnOffEnPasant();
-protected:
-	static Location GetNormalizedMove(const Location& move_vec );
-	bool IsOneCellRange( const Location& move_vec ) const;
-	bool IsDiagonal( const Location& move_vec ) const;
-	bool IsHorizontal( const Location& move_vec ) const;
-	bool IsVertical( const Location& move_vec ) const;
-	bool PathIsFree( const Board& brd, const Location& move_vec, const CellArray::Cell& nxt_pos ) const;
-	bool IsFreeCell( const CellArray::Cell& nxt_pos ) const;
-	bool IsEnemyCell( const CellArray::Cell& nxt_pos ) const;
 protected:
 	CellArray::Cell* cell;
 	const bool isLightSide;
