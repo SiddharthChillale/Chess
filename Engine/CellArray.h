@@ -17,6 +17,13 @@ private:
 		void Draw( Graphics& gfx, Color in_c );
 		void Draw( Graphics& gfx);
 
+		bool IsFree() const;
+		bool PieceSide() const;
+		bool IsEnPasant() const;
+		bool IsAlive() const;
+		void RecordDeath();
+		void turnOffEnPassant();
+
 		void PutPiece( std::shared_ptr<Piece> in_piece );
 		void RemovePiece();
 		void MovePieceTo( Cell& nxt_pos );

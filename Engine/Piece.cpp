@@ -32,6 +32,11 @@ Location Piece::GetMoveVec( const Board& brd, const Cell& cur_pos, const Cell& n
 	return brd.PixelToCellDim(move_vec);
 }
 
+void Piece::RecordDeath()
+{
+	isAlive = false;
+}
+
 void Piece::TurnOffEnPasant()
 {
 	isEnPasant = false;
@@ -106,4 +111,9 @@ bool Piece::IsEnemyCell( const Cell& nxt_pos ) const
 bool Piece::IsEnPasant() const
 {
 	return isEnPasant;
+}
+
+bool Piece::IsAlive() const
+{
+	return isAlive;
 }

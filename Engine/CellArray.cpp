@@ -121,3 +121,35 @@ void CellArray::Cell::MovePieceTo( Cell& nxt_pos )
 	}
 	nxt_pos.piece = std::move( piece );
 }
+
+bool CellArray::Cell::IsFree() const
+{
+	return !bool( piece );
+}
+
+bool CellArray::Cell::PieceSide() const
+{
+	assert( piece );
+	return piece->PieceSide();
+}
+
+bool CellArray::Cell::IsEnPasant() const
+{
+	return piece->IsEnPasant();
+}
+
+bool CellArray::Cell::IsAlive() const
+{
+	assert( piece );
+	return piece->IsAlive();
+}
+
+void CellArray::Cell::RecordDeath()
+{
+	piece->RecordDeath();
+}
+
+void CellArray::Cell::turnOffEnPassant()
+{
+	piece->TurnOffEnPasant();
+}
