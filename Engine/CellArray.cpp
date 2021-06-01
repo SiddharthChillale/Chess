@@ -8,7 +8,7 @@ CellArray::Cell::Cell( const Location& in_loc, int row_idx, int col_idx, Color i
 {
 }
 
-void CellArray::Cell::Draw( Graphics& gfx, Color in_c )
+void CellArray::Cell::Draw( Graphics& gfx, Color in_c ) const
 {
 	const int top_left_x = loc.x + offset;
 	const int top_left_y = loc.y + offset;
@@ -17,7 +17,7 @@ void CellArray::Cell::Draw( Graphics& gfx, Color in_c )
 	gfx.DrawRect( top_left_x, top_left_y, bottom_right_x, bottom_right_y, c );
 }
 
-void CellArray::Cell::Draw( Graphics& gfx )
+void CellArray::Cell::Draw( Graphics& gfx ) const
 {
 	Draw( gfx, c );
 }
@@ -55,7 +55,7 @@ CellArray::CellArray( const Location& in_loc, int in_dimension0, int in_dimensio
 	}
 }
 
-void CellArray::Draw( Graphics& gfx )
+void CellArray::Draw( Graphics& gfx ) const
 {
 	for( int i = 0; i < cells.size(); i++ )
 	{

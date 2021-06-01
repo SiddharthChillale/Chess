@@ -14,8 +14,8 @@ private:
 	{
 	public:
 		Cell( const Location& in_loc, int row_idx, int col_idx, Color in_c );
-		void Draw( Graphics& gfx, Color in_c );
-		void Draw( Graphics& gfx);
+		void Draw( Graphics& gfx, Color in_c ) const;
+		void Draw( Graphics& gfx) const;
 
 		bool IsFree() const;
 		bool PieceSide() const;
@@ -37,7 +37,7 @@ private:
 public:
 	CellArray( const Location& in_loc, int in_dimension );
 	CellArray( const Location& in_loc, int in_dimension1, int in_dimension2, Color in_c );
-	void Draw( Graphics& gfx );
+	void Draw( Graphics& gfx ) const;
 	bool MouseIsOnArray( const Mouse& mouse ) const;
 	Location GetIdx( const Location& in_loc ) const;
 	const Cell& operator[]( const Location& loc ) const;
