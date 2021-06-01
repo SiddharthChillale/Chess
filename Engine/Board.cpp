@@ -218,3 +218,8 @@ bool Board::TargetIsEnPasant( const Location& target ) const
 	}
 	return false;
 }
+
+bool Board::IsKnightMove( const Location& move_vec ) const
+{
+	return std::abs( move_vec.x ) + std::abs( move_vec.y ) == 3;
+}

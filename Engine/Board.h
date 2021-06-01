@@ -38,6 +38,7 @@ public:
 	bool IsDiagonal( const Location& move_vec ) const;
 	bool IsHorizontal( const Location& move_vec ) const;
 	bool IsVertical( const Location& move_vec ) const;
+	bool IsKnightMove( const Location& move_vec ) const;
 	Location GetEnPasantTarget( const Location& move_vec ) const;
 	bool TargetIsEnPasant( const Location& target ) const;
 	bool NextIsFree() const;
