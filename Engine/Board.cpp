@@ -23,6 +23,12 @@ void Board::SetNextSideMove()
 	isLightSideMove = !isLightSideMove;
 }
 
+void Board::PerformMovement()
+{
+	const Location move_vec = GetMoveVec( GetCurrentCell().location, GetNextCell().location );
+	GetCurrentCell().piece->Move( *this );
+}
+
 bool Board::GetCurrentTurn() const
 {
 	return isLightSideMove;
@@ -96,6 +102,37 @@ const CellArray::Cell& Board::GetNextCell() const
 	return arr.GetSelected( 1 );
 }
 
+void Board::DeselectLastCell()
+{
+	arr.DeselectLast();
+}
+
+void Board::DeselectAllCells()
+{
+	arr.DeselectAll();
+}
+
+Location Board::GetIdx( const Location& loc ) const
+{
+	return arr.GetIdx( loc );
+}
+
+CellArray::Cell& Board::GetCell( const Location& locIdx )
+{
+	return arr[locIdx];
+}
+
+const CellArray::Cell& Board::GetCell( const Location& locIdx ) const
+{
+	return arr[locIdx];
+}
+
+Location Board::GetMoveVec( const Location& current, const Location& next )
+{
+	const Location move_vec = (next - current) / CellArray::Cell::dimension;
+	return move_vec;
+}
+
 Location Board::GetNormalizedMove( const Location& move_vec )
 {
 	Location result( 0, 0 );
@@ -142,4 +179,42 @@ bool Board::NextIsEnemy() const
 		return false;
 	}
 	return GetCurrentCell().PieceSide() != GetNextCell().PieceSide();
+}
+
+bool Board::IsForwardMove( const Location& move_vec ) const
+{
+	if( GetCurrentCell().piece->IsLightSide() )
+	{
+		return move_vec.y < 0;
+	}
+	return move_vec.y > 0;
+}
+
+bool Board::IsFastForwardMove( const Location& move_vec ) const
+{
+	assert( IsForwardMove( move_vec ) && GetNextCell().IsFree() );
+	return  (std::abs( move_vec.y ) == 2) && (std::abs( move_vec.x ) == 0) && (!GetCurrentCell().piece->IsMoved());
+}
+
+bool Board::IsStepForwardMove( const Location& move_vec ) const
+{
+	assert( IsForwardMove( move_vec ) && GetNextCell().IsFree() );
+	return (std::abs( move_vec.x ) == 0) && (std::abs( move_vec.y ) == 1);
+}
+
+Location Board::GetEnPasantTarget( const Location& move_vec ) const
+{
+	const Location target = GetIdx( GetCurrentCell().location ) + Location( move_vec.x, move_vec.y * 0 );
+	return target;
+}
+
+bool Board::TargetIsEnPasant( const Location& target ) const
+{
+	const CellArray::Cell& MaybeEnPasant = GetCell( target );
+	if( !MaybeEnPasant.IsFree() &&
+		(GetCurrentCell().piece->PieceSide() != MaybeEnPasant.PieceSide()) && MaybeEnPasant.IsEnPasant() )
+	{
+		return true;
+	}
+	return false;
 }

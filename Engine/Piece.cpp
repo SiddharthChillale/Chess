@@ -24,14 +24,6 @@ bool Piece::PieceSide() const
 	return isLightSide;
 }
 
-Location Piece::GetMoveVec( const CellArray::Cell& cur_pos, const CellArray::Cell& nxt_pos )
-{
-	const Location current = cur_pos.location;
-	const Location next = nxt_pos.location;
-	const Location move_vec = (next - current) / CellArray::Cell::dimension;
-	return move_vec;
-}
-
 void Piece::RecordDeath()
 {
 	isAlive = false;
@@ -50,4 +42,19 @@ bool Piece::IsEnPasant() const
 bool Piece::IsAlive() const
 {
 	return isAlive;
+}
+
+bool Piece::IsLightSide() const
+{
+	return isLightSide;
+}
+
+bool Piece::IsMoved() const
+{
+	return isMoved;
+}
+
+void Piece::RecordMove()
+{
+	isMoved = true;
 }

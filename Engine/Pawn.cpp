@@ -1,120 +1,77 @@
 #include "Pawn.h"
-#include "Cell.h"
+#include "CellArray.h"
 #include "Board.h"
 #include <cassert>
 
-Pawn::Pawn( Cell& cell, bool in_isLightSide )
+Pawn::Pawn( CellArray::Cell& cell, bool in_isLightSide )
 	:
 	Piece( cell, in_isLightSide )
 {
 }
 
-void Pawn::Move( Board& brd, const Location& move_vec, Cell& nxt_pos )
+void Pawn::Move( Board& brd )
 {
 	const bool currentTurn = brd.GetCurrentTurn();
-	
-	const Location cur_loc = brd.PixelToCellDim(cell->GetLocation());
-	Cell& cur_pos = brd.GetCell( cur_loc.x, cur_loc.y );
+	CellArray::Cell& next_cell = brd.GetNextCell();
+	const Location& cur_pos = brd.GetIdx( brd.GetCurrentCell().location );
+	const Location& nxt_pos = brd.GetIdx( brd.GetNextCell().location );
+	const Location& move_vec = Board::GetMoveVec( cur_pos, nxt_pos );
 
-	if( IsForwardMove( move_vec ) )
+	if( brd.IsForwardMove( move_vec ) )
 	{
-		if( nxt_pos.IsFree() )
+		if( next_cell.IsFree() )
 		{
-			if( IsStepForwardMove( move_vec, nxt_pos ) )
+			if( brd.IsStepForwardMove( move_vec ) )
 			{
 				// Do step forward move
-				cell->MovePieceTo( nxt_pos );
-				cell = &nxt_pos;
+				cell->MovePieceTo( next_cell );
+				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
-			else if( IsFastForwardMove( move_vec, nxt_pos ) && PathIsFree( brd, move_vec, nxt_pos ) )
+			else if( brd.IsFastForwardMove( move_vec ) && brd.PathIsFree( move_vec ) )
 			{
 				// Do fast forward move
 				isEnPasant = true;
-				cell->MovePieceTo( nxt_pos );
-				cell = &nxt_pos;
+				cell->MovePieceTo( next_cell );
+				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
-			else if( IsDiagonal(move_vec) )
+			else if( brd.IsDiagonal(move_vec) )
 			{
-				const Location target = GetEnPasantTarget( brd, move_vec );
-				if( TargetIsEnPasant( brd, target ) )
+				const Location target = brd.GetEnPasantTarget( move_vec );
+				if( brd.TargetIsEnPasant( target ) )
 				{
 					// Attack enPasant
-					Cell& enPasant = GetEnPasant( brd, target );
-					cell->MovePieceTo( nxt_pos );
-					cell = &nxt_pos;
+					CellArray::Cell& enPasant = brd.GetCell( target );
+					cell->MovePieceTo( next_cell );
+					cell = &next_cell;
 					enPasant.RemovePiece();
 					brd.SetNextSideMove();
 				}
 			}
 		}
-		else if( IsDiagonal( move_vec ) && IsOneCellRange( move_vec ) )
+		else if( brd.IsDiagonal( move_vec ) && brd.IsOneCellRange( move_vec ) )
 		{
-			if( IsEnemyCell( nxt_pos ) )
+			if( brd.NextIsEnemy() )
 			{
 				// Attack directly
-				cell->MovePieceTo( nxt_pos );
-				cell = &nxt_pos;
+				cell->MovePieceTo( next_cell );
+				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
 		}
 	}
 
-	brd.DeselectTargetCell();
+	brd.DeselectLastCell();
 
 	const bool nextTurn = currentTurn != brd.GetCurrentTurn();
 	if( nextTurn && (isEnPasant && isMoved) )
 	{
-		nxt_pos.turnOffEnPassant();
+		next_cell.turnOffEnPassant();
 	}
 	if( nextTurn )
 	{
 		isMoved = true;
-		brd.DeselectBothCells();
+		brd.DeselectAllCells();
 	}
-}
-
-bool Pawn::IsForwardMove( const Location& move_vec ) const
-{
-	if( isLightSide )
-	{
-		return move_vec.y < 0;
-	}
-	return move_vec.y > 0;
-}
-
-bool Pawn::IsFastForwardMove( const Location& move_vec, const Cell& nxt_pos ) const
-{
-	assert( IsForwardMove( move_vec ) && nxt_pos.IsFree() );
-	return  (std::abs( move_vec.y ) == 2) && (std::abs( move_vec.x ) == 0) && (!isMoved);
-}
-
-bool Pawn::IsStepForwardMove( const Location& move_vec, const Cell& nxt_pos ) const
-{
-	assert( IsForwardMove(move_vec) && nxt_pos.IsFree() );
-	return (std::abs( move_vec.x ) == 0) && (std::abs( move_vec.y ) == 1);
-}
-
-Location Pawn::GetEnPasantTarget( const Board& brd, const Location& move_vec ) const
-{
-	const Location target = brd.PixelToCellDim( cell->GetLocation() ) + Location( move_vec.x, move_vec.y * 0 );
-	return target;
-}
-
-Cell& Pawn::GetEnPasant( Board& brd, const Location& move_vec )
-{
-	assert( TargetIsEnPasant( brd, move_vec ) );
-	return brd.GetCell( move_vec.x, move_vec.y );
-}
-
-bool Pawn::TargetIsEnPasant( const Board& brd, const Location& target ) const
-{
-	const Cell& MaybeEnPasant = brd.GetConstCell( target );
-	if( !MaybeEnPasant.IsFree() &&
-		(PieceSide() != MaybeEnPasant.PieceSide()) && MaybeEnPasant.IsEnPasant() )
-	{
-		return true;
-	}
-	return false;
 }

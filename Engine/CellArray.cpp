@@ -112,6 +112,11 @@ CellArray::Cell& CellArray::GetSelected( int idx )
 	return cells[idx];
 }
 
+const CellArray::Cell& CellArray::GetSelected( int idx ) const
+{
+	return cells[idx];
+}
+
 CellArray::Cell& CellArray::GetSelected( int idx )
 {
 	return cells[idx];
@@ -160,12 +165,6 @@ void CellArray::Cell::MovePieceTo( Cell& nxt_pos )
 		nxt_pos.RemovePiece();
 	}
 	nxt_pos.piece = std::move( piece );
-}
-
-void CellArray::Cell::PerformMovement( Cell& current, Cell& next )
-{
-	const Location move_vec = Piece::GetMoveVec( current, next );
-	current.piece->Move( brd, move_vec, nxt_pos );
 }
 
 bool CellArray::Cell::IsFree() const
