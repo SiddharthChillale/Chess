@@ -5,6 +5,6 @@
 class Knight : public Piece
 {
 public:
-	Knight( class CellArray::Cell& cell, bool in_isLightSide );
+	Knight( class Cell& cell, bool in_isLightSide );
 	void Move( class Board& brd ) override;
 };

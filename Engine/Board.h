@@ -15,10 +15,10 @@ public:
 	void Draw( Graphics& gfx ) const;
 	void ProcessInput( const Graphics& gfx, const Mouse& mouse );
 	bool PathIsFree( const Location& move_vec ) const;
-	CellArray::Cell& GetCurrentCell();
-	CellArray::Cell& GetNextCell();
-	const CellArray::Cell& GetCurrentCell() const;
-	const CellArray::Cell& GetNextCell() const;
+	Cell& GetCurrentCell();
+	Cell& GetNextCell();
+	const Cell& GetCurrentCell() const;
+	const Cell& GetNextCell() const;
 	void DeselectLastCell();
 	void DeselectAllCells();
 	bool GetCurrentTurn() const;
@@ -26,8 +26,8 @@ public:
 	void PerformMovement();
 
 	Location GetIdx( const Location& loc ) const;
-	CellArray::Cell& GetCell( const Location& locIdx );
-	const CellArray::Cell& GetCell( const Location& locIdx ) const;
+	Cell& GetCell( const Location& locIdx );
+	const Cell& GetCell( const Location& locIdx ) const;
 	static Location GetMoveVec( const Location& current, const Location& next );
 	static Location GetNormalizedMove( const Location& move_vec );
 	bool IsForwardMove( const Location& move_vec ) const;

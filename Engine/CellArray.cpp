@@ -1,27 +1,6 @@
 #include "CellArray.h"
 #include <cassert>
 
-CellArray::Cell::Cell( const Location& in_loc, int row_idx, int col_idx, Color in_c )
-	:
-	location( in_loc ),
-	color( in_c )
-{
-}
-
-void CellArray::Cell::Draw( Graphics& gfx, Color in_c ) const
-{
-	const int top_left_x = location.x + offset;
-	const int top_left_y = location.y + offset;
-	const int bottom_right_x = location.x + dimension - offset;
-	const int bottom_right_y = location.y + dimension - offset;
-	gfx.DrawRect( top_left_x, top_left_y, bottom_right_x, bottom_right_y, in_c );
-}
-
-void CellArray::Cell::Draw( Graphics& gfx ) const
-{
-	Draw( gfx, color );
-}
-
 CellArray::CellArray( const Location& in_loc, int in_dimension )
 	:
 	location( in_loc ),
@@ -80,16 +59,6 @@ Location CellArray::GetIdx( const Location& in_loc ) const
 	return locRelativeToBoard / Cell::dimension;
 }
 
-const CellArray::Cell& CellArray::operator[]( const Location& loc ) const
-{
-	return cells[loc.x * dimension0 + loc.y];
-}
-
-CellArray::Cell& CellArray::operator[]( const Location& loc )
-{
-	return cells[loc.x * dimension0 + loc.y];
-}
-
 int CellArray::selectedCellsCount() const
 {
 	return lastSelected;
@@ -105,21 +74,6 @@ bool CellArray::IsSelected( const Cell& cell ) const
 		}
 	}
 	return false;
-}
-
-CellArray::Cell& CellArray::GetSelected( int idx )
-{
-	return cells[idx];
-}
-
-const CellArray::Cell& CellArray::GetSelected( int idx ) const
-{
-	return cells[idx];
-}
-
-CellArray::Cell& CellArray::GetSelected( int idx )
-{
-	return cells[idx];
 }
 
 void CellArray::Select( Cell& cell )
@@ -145,56 +99,22 @@ void CellArray::DeselectAll()
 	}
 }
 
-void CellArray::Cell::PutPiece( std::shared_ptr<Piece> in_piece )
+const Cell& CellArray::operator[]( const Location& loc ) const
 {
-	assert( !piece );
-	piece = in_piece;
+	return cells[loc.x * dimension0 + loc.y];
 }
 
-void CellArray::Cell::RemovePiece()
+Cell& CellArray::operator[]( const Location& loc )
 {
-	assert( piece );
-	piece = nullptr;
+	return cells[loc.x * dimension0 + loc.y];
 }
 
-void CellArray::Cell::MovePieceTo( Cell& nxt_pos )
+Cell& CellArray::GetSelected( int idx )
 {
-	assert( piece );
-	if( nxt_pos.piece )
-	{
-		nxt_pos.RemovePiece();
-	}
-	nxt_pos.piece = std::move( piece );
+	return cells[idx];
 }
 
-bool CellArray::Cell::IsFree() const
+const Cell& CellArray::GetSelected( int idx ) const
 {
-	return !bool( piece );
-}
-
-bool CellArray::Cell::PieceSide() const
-{
-	assert( piece );
-	return piece->PieceSide();
-}
-
-bool CellArray::Cell::IsEnPasant() const
-{
-	return piece->IsEnPasant();
-}
-
-bool CellArray::Cell::IsAlive() const
-{
-	assert( piece );
-	return piece->IsAlive();
-}
-
-void CellArray::Cell::RecordDeath()
-{
-	piece->RecordDeath();
-}
-
-void CellArray::Cell::turnOffEnPassant()
-{
-	piece->TurnOffEnPasant();
+	return cells[idx];
 }

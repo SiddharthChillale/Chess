@@ -8,6 +8,6 @@
 class Pawn : public Piece
 {
 public:
-	Pawn( class CellArray::Cell& cell, bool in_isLightSide );
+	Pawn( class Cell& cell, bool in_isLightSide );
 	void Move( Board& brd ) override;
 };

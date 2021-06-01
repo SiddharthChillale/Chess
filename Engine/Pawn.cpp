@@ -3,7 +3,7 @@
 #include "Board.h"
 #include <cassert>
 
-Pawn::Pawn( CellArray::Cell& cell, bool in_isLightSide )
+Pawn::Pawn( Cell& cell, bool in_isLightSide )
 	:
 	Piece( cell, in_isLightSide )
 {
@@ -12,7 +12,7 @@ Pawn::Pawn( CellArray::Cell& cell, bool in_isLightSide )
 void Pawn::Move( Board& brd )
 {
 	const bool currentTurn = brd.GetCurrentTurn();
-	CellArray::Cell& next_cell = brd.GetNextCell();
+	Cell& next_cell = brd.GetNextCell();
 	const Location& cur_pos = brd.GetIdx( brd.GetCurrentCell().location );
 	const Location& nxt_pos = brd.GetIdx( brd.GetNextCell().location );
 	const Location& move_vec = Board::GetMoveVec( cur_pos, nxt_pos );
@@ -42,7 +42,7 @@ void Pawn::Move( Board& brd )
 				if( brd.TargetIsEnPasant( target ) )
 				{
 					// Attack enPasant
-					CellArray::Cell& enPasant = brd.GetCell( target );
+					Cell& enPasant = brd.GetCell( target );
 					cell->MovePieceTo( next_cell );
 					cell = &next_cell;
 					enPasant.RemovePiece();

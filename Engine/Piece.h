@@ -6,7 +6,7 @@
 class Piece
 {
 public:
-	Piece( class CellArray::Cell& cell, bool in_isLightSide);
+	Piece( class Cell& cell, bool in_isLightSide);
 	virtual void Move( class Board& brd ) = 0;
 	void Draw( Graphics& gfx) const;
 	bool PieceSide() const;
@@ -18,7 +18,7 @@ public:
 	void RecordDeath();
 	void TurnOffEnPasant();
 protected:
-	class CellArray::Cell* cell;
+	Cell* cell;
 	const bool isLightSide;
 	const Color c;
 	bool isAlive = true;

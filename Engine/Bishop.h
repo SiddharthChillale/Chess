@@ -5,6 +5,6 @@
 class Bishop : public Piece
 {
 public:
-	Bishop( class CellArray::Cell& cell, bool in_isLightSide );
+	Bishop( class Cell& cell, bool in_isLightSide );
 	void Move( class Board& brd ) override;
 };

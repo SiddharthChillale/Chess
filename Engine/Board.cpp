@@ -40,7 +40,7 @@ void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 	{
 		isReleasedLeft = false;
 		const Location mouse_loc_idx = Location( mouse.GetPosX(), mouse.GetPosY() );
-		CellArray::Cell& cell_to_select = arr[mouse_loc_idx];
+		Cell& cell_to_select = arr[GetIdx( mouse_loc_idx )];
 		if( arr.selectedCellsCount() == 0 )
 		{
 			if( !cell_to_select.IsFree() && (cell_to_select.PieceSide() == isLightSideMove) )
@@ -55,7 +55,9 @@ void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 		else if( arr.selectedCellsCount() == 1 )
 		{
 			arr.Select( cell_to_select );
-			CellArray::Cell::PerformMovement( arr.GetSelected(0), arr.GetSelected(1) );
+			const int current_cell = 0;
+			const int next_cell = 1;
+			Cell::PerformMovement( *this );
 		}
 	}
 	if( !mouse.LeftIsPressed() )
@@ -82,22 +84,22 @@ bool Board::PathIsFree( const Location& move_vec ) const
 	return true;
 }
 
-CellArray::Cell& Board::GetCurrentCell()
+Cell& Board::GetCurrentCell()
 {
 	return arr.GetSelected( 0 );
 }
 
-CellArray::Cell& Board::GetNextCell()
+Cell& Board::GetNextCell()
 {
 	return arr.GetSelected( 1 );
 }
 
-const CellArray::Cell& Board::GetCurrentCell() const
+const Cell& Board::GetCurrentCell() const
 {
 	return arr.GetSelected( 0 );
 }
 
-const CellArray::Cell& Board::GetNextCell() const
+const Cell& Board::GetNextCell() const
 {
 	return arr.GetSelected( 1 );
 }
@@ -117,19 +119,19 @@ Location Board::GetIdx( const Location& loc ) const
 	return arr.GetIdx( loc );
 }
 
-CellArray::Cell& Board::GetCell( const Location& locIdx )
+Cell& Board::GetCell( const Location& locIdx )
 {
 	return arr[locIdx];
 }
 
-const CellArray::Cell& Board::GetCell( const Location& locIdx ) const
+const Cell& Board::GetCell( const Location& locIdx ) const
 {
 	return arr[locIdx];
 }
 
 Location Board::GetMoveVec( const Location& current, const Location& next )
 {
-	const Location move_vec = (next - current) / CellArray::Cell::dimension;
+	const Location move_vec = (next - current) / Cell::dimension;
 	return move_vec;
 }
 
@@ -210,7 +212,7 @@ Location Board::GetEnPasantTarget( const Location& move_vec ) const
 
 bool Board::TargetIsEnPasant( const Location& target ) const
 {
-	const CellArray::Cell& MaybeEnPasant = GetCell( target );
+	const Cell& MaybeEnPasant = GetCell( target );
 	if( !MaybeEnPasant.IsFree() &&
 		(GetCurrentCell().piece->PieceSide() != MaybeEnPasant.PieceSide()) && MaybeEnPasant.IsEnPasant() )
 	{

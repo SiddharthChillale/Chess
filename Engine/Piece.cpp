@@ -1,9 +1,10 @@
 #include "Piece.h"
+#include "Cell.h"
 #include "CellArray.h"
 #include "Board.h"
 #include <cassert>
 
-Piece::Piece( CellArray::Cell& in_cell, bool in_isLightSide )
+Piece::Piece( Cell& in_cell, bool in_isLightSide )
 	:
 	cell( &in_cell ), 
 	isLightSide( in_isLightSide ),
@@ -14,7 +15,7 @@ Piece::Piece( CellArray::Cell& in_cell, bool in_isLightSide )
 
 void Piece::Draw( Graphics& gfx) const
 {
-	const int center = CellArray::Cell::dimension / 2;
+	const int center = Cell::dimension / 2;
 	const Location global_location = cell->location + Location( center, center );
 	gfx.DrawCircle( global_location.x, global_location.y, 25, c );
 }
