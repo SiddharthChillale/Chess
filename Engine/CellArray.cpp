@@ -3,15 +3,8 @@
 
 CellArray::Cell::Cell( const Location& in_loc, int row_idx, int col_idx, Color in_c )
 	:
-	loc( in_loc + Location( row_idx, col_idx ) * dimension ),
+	loc( in_loc ),
 	c( in_c )
-{
-}
-
-CellArray:: Cell::Cell( const Location& in_loc, int row_idx, int col_idx )
-	:
-	loc( in_loc + Location( row_idx, col_idx ) * dimension ),
-	c( ((row_idx + col_idx) % 2) ? CellArray::darkCell : CellArray::lightCell )
 {
 }
 
@@ -39,7 +32,9 @@ CellArray::CellArray( const Location& in_loc, int in_dimension )
 	{
 		for( int j = 0; j < in_dimension; j++ )
 		{
-			cells.push_back( Cell( loc, i, j ) );
+			const Location cell_loc = in_loc + Location( i, j ) * Cell::dimension;
+			const Color cell_color = ((i + j) % 2) ? CellArray::darkCell : CellArray::lightCell;
+			cells.push_back( Cell( cell_loc, i, j, cell_color ) );
 		}
 	}
 }
@@ -53,7 +48,10 @@ CellArray::CellArray( const Location& in_loc, int in_dimension0, int in_dimensio
 	for( int i = 0; i < in_dimension0; i++ )
 	{
 		for( int j = 0; j < in_dimension1; j++ )
-		cells.emplace_back( loc, i, j, in_c );
+		{
+			const Location cell_loc = in_loc + Location( i, j ) * Cell::dimension;
+			cells.emplace_back( cell_loc, i, j, in_c );
+		}
 	}
 }
 

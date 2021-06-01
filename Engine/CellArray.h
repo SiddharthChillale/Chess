@@ -14,7 +14,6 @@ private:
 	{
 	public:
 		Cell( const Location& in_loc, int row_idx, int col_idx, Color in_c );
-		Cell( const Location& in_loc, int row_idx, int col_idx );
 		void Draw( Graphics& gfx, Color in_c );
 		void Draw( Graphics& gfx);
 
