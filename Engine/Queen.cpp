@@ -1,38 +1,39 @@
 #include "Queen.h"
 #include "Board.h"
 
-Queen::Queen( Cell& cell, bool in_isLightSide )
+Queen::Queen( class CellArray::Cell& cell, bool in_isLightSide )
 	:
 	Piece( cell, in_isLightSide )
 {
 }
 
-void Queen::Move( Board& brd, const Location& move_vec, Cell& nxt_pos )
+void Queen::Move( class Board& brd )
 {
 	const bool currentTurn = brd.GetCurrentTurn();
+	CellArray::Cell& next_cell = brd.GetNextCell();
+	const Location& cur_pos = brd.GetIdx( brd.GetCurrentCell().location );
+	const Location& nxt_pos = brd.GetIdx( brd.GetNextCell().location );
+	const Location& move_vec = Board::GetMoveVec( cur_pos, nxt_pos );
 
-	const Location cur_loc = brd.PixelToCellDim( cell->GetLocation() );
-	Cell& cur_pos = brd.GetCell( cur_loc.x, cur_loc.y );
-
-	if( IsDiagonal( move_vec ) || IsHorizontal( move_vec ) || IsVertical( move_vec ) )
+	if( brd.IsDiagonal( move_vec ) || brd.IsHorizontal( move_vec ) || brd.IsVertical( move_vec ) )
 	{
-		if( PathIsFree( brd, move_vec, nxt_pos ) )
+		if( brd.PathIsFree( move_vec ) )
 		{
-			if( nxt_pos.IsFree() || IsEnemyCell( nxt_pos ) )
+			if( next_cell.IsFree() || brd.NextIsEnemy() )
 			{
-				cell->MovePieceTo( nxt_pos );
-				cell = &nxt_pos;
+				cell->MovePieceTo( next_cell );
+				cell = &next_cell;
 				brd.SetNextSideMove();
 			}
 		}
 	}
 
-	brd.DeselectTargetCell();
+	brd.DeselectLastCell();
 
 	const bool nextTurn = currentTurn != brd.GetCurrentTurn();
 	if( nextTurn )
 	{
 		isMoved = true;
-		brd.DeselectBothCells();
+		brd.DeselectAllCells();
 	}
 }
