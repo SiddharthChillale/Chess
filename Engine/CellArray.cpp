@@ -79,6 +79,16 @@ Location CellArray::GetIdx( const Location& in_loc ) const
 	return locRelativeToBoard / Cell::dimension;
 }
 
+const CellArray::Cell& CellArray::operator[]( const Location& loc ) const
+{
+	return cells[loc.x * dimension0 + loc.y];
+}
+
+CellArray::Cell& CellArray::operator[]( const Location& loc )
+{
+	return cells[loc.x * dimension0 + loc.y];
+}
+
 void CellArray::SelectFirst( int row_idx, int col_idx )
 {
 	selectedFirst = &cells[row_idx * dimension0 + col_idx];

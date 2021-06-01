@@ -40,6 +40,8 @@ public:
 	void Draw( Graphics& gfx );
 	bool MouseIsOnArray( const Mouse& mouse ) const;
 	Location GetIdx( const Location& in_loc ) const;
+	const Cell& operator[]( const Location& loc ) const;
+	Cell& operator[]( const Location& loc );
 
 	void SelectFirst( int row_idx, int col_idx);
 	void SelectSecond( int row_idx, int col_idx);
