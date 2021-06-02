@@ -40,8 +40,8 @@ void Cell::PutPiece( std::shared_ptr<Piece> in_piece )
 void Cell::RemovePiece()
 {
 	assert( piece );
-	piece = nullptr;
 	piece->OccupyCell( nullptr );
+	piece.reset();
 }
 
 void Cell::MovePieceTo( Cell& nxt_pos )
@@ -52,7 +52,8 @@ void Cell::MovePieceTo( Cell& nxt_pos )
 	{
 		nxt_pos.RemovePiece();
 	}
-	nxt_pos.piece = piece;
+	nxt_pos.PutPiece( piece );
+	piece.reset();
 }
 
 void Cell::PerformMovement( Board& brd )
@@ -62,7 +63,7 @@ void Cell::PerformMovement( Board& brd )
 
 bool Cell::IsFree() const
 {
-	return !bool( piece );
+	return !piece;
 }
 
 bool Cell::PieceSide() const

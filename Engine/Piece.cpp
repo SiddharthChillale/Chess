@@ -17,6 +17,7 @@ void Piece::OccupyCell( Cell* in_cell )
 
 void Piece::Draw( Graphics& gfx) const
 {
+	assert( cell );
 	const int center = Cell::dimension / 2;
 	const Location global_location = cell->location + Location( center, center );
 	gfx.DrawCircle( global_location.x, global_location.y, 25, c );

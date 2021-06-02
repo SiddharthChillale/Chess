@@ -62,9 +62,7 @@ void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 		else if( arr.selectedCellsCount() == 1 )
 		{
 			arr.Select( cell_to_select );
-			const int current_cell = 0;
-			const int next_cell = 1;
-			current_player->Move( *this, arr.GetSelected( current_cell ).piece );
+			current_player->Move( *this, GetCurrentCell().piece );
 		}
 	}
 	if( !mouse.LeftIsPressed() )
@@ -104,12 +102,12 @@ void Board::PutPieces( Player& player, bool isLightSide )
 bool Board::PathIsFree( const Location& move_vec ) const
 {
 	const Location& norm_move_vec = Board::GetNormalizedMove( move_vec );
-	const Location destination = arr.GetIdx( GetCurrentCell().location );
-	const Location current = arr.GetIdx( GetNextCell().location );
+	const Location destination = arr.GetIdx( GetNextCell().location );
+	const Location current = arr.GetIdx( GetCurrentCell().location );
 	Location cur_pos = current + norm_move_vec;
 	while( cur_pos != destination )
 	{
-		const bool isNotFree = !GetCurrentCell().IsFree();
+		const bool isNotFree = !arr[cur_pos].IsFree();
 		if( isNotFree )
 		{
 			return false;
