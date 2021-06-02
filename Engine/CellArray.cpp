@@ -104,11 +104,10 @@ void CellArray::DeselectLast()
 
 void CellArray::DeselectAll()
 {
-	while( lastSelected >= 0 )
-	{
+	do {
 		selectedCells[lastSelected] = nullptr;
 		lastSelected--;
-	}
+	} while( lastSelected != 0 );
 }
 
 const Cell& CellArray::operator[]( const Location& loc ) const
