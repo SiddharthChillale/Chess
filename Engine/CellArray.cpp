@@ -122,10 +122,10 @@ Cell& CellArray::operator[]( const Location& loc )
 
 Cell& CellArray::GetSelected( int idx )
 {
-	return cells[idx];
+	return *selectedCells[idx];
 }
 
 const Cell& CellArray::GetSelected( int idx ) const
 {
-	return cells[idx];
+	return *selectedCells[idx];
 }
