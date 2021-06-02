@@ -8,6 +8,6 @@
 class Pawn : public Piece
 {
 public:
-	Pawn( class Cell& cell, bool in_isLightSide );
+	Pawn( class Player& in_player );
 	void Move( Board& brd ) override;
 };

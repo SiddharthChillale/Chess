@@ -39,7 +39,19 @@ void CellArray::Draw( Graphics& gfx ) const
 {
 	for( int i = 0; i < cells.size(); i++ )
 	{
-		cells[i].Draw( gfx );
+		bool flag = false;
+		for( int j = 0; j < lastSelected; j++ )
+		{
+			if( &cells[i] == selectedCells[j] )
+			{
+				cells[i].Draw( gfx, colorSelectedCell );
+				flag = true;
+			}
+		}
+		if( !flag )
+		{
+			cells[i].Draw( gfx );
+		}
 	}
 }
 
@@ -68,7 +80,7 @@ bool CellArray::IsSelected( const Cell& cell ) const
 {
 	for( int i = 0; i < lastSelected; i++ )
 	{
-		if( &cells[i] == &cell )
+		if( selectedCells[i] == &cell )
 		{
 			return true;
 		}

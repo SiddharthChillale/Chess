@@ -15,23 +15,33 @@ void Cell::Draw( Graphics& gfx, Color in_c ) const
 	const int bottom_right_x = location.x + dimension - offset;
 	const int bottom_right_y = location.y + dimension - offset;
 	gfx.DrawRect( top_left_x, top_left_y, bottom_right_x, bottom_right_y, in_c );
+	if( piece )
+	{
+		piece->Draw( gfx );
+	}
 }
 
 void Cell::Draw( Graphics& gfx ) const
 {
 	Draw( gfx, color );
+	if( piece )
+	{
+		piece->Draw( gfx );
+	}
 }
 
 void Cell::PutPiece( std::shared_ptr<Piece> in_piece )
 {
 	assert( !piece );
 	piece = in_piece;
+	piece->OccupyCell( this );
 }
 
 void Cell::RemovePiece()
 {
 	assert( piece );
 	piece = nullptr;
+	piece->OccupyCell( nullptr );
 }
 
 void Cell::MovePieceTo( Cell& nxt_pos )
@@ -40,7 +50,6 @@ void Cell::MovePieceTo( Cell& nxt_pos )
 	assert( piece );
 	if( nxt_pos.piece )
 	{
-		nxt_pos.piece->RecordDeath();
 		nxt_pos.RemovePiece();
 	}
 	nxt_pos.piece = piece;
@@ -71,11 +80,6 @@ bool Cell::IsAlive() const
 {
 	assert( piece );
 	return piece->IsAlive();
-}
-
-void Cell::RecordDeath()
-{
-	piece->RecordDeath();
 }
 
 void Cell::turnOffEnPassant()

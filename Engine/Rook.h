@@ -4,8 +4,7 @@
 
 class Rook : public Piece
 {
-
 public:
-	Rook( class Cell& cell, bool in_isLightSide );
+	Rook( class Player& in_player );
 	void Move( class Board& brd ) override;
 };

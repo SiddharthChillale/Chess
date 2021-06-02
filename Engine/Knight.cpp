@@ -1,9 +1,9 @@
 #include "Knight.h"
 #include "Board.h"
 
-Knight::Knight( class Cell& cell, bool in_isLightSide )
+Knight::Knight( Player& in_player )
 	:
-	Piece( cell, in_isLightSide )
+	Piece( in_player )
 {
 }
 

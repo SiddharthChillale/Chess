@@ -5,6 +5,6 @@
 class Bishop : public Piece
 {
 public:
-	Bishop( class Cell& cell, bool in_isLightSide );
+	Bishop( class Player& in_player );
 	void Move( class Board& brd ) override;
 };

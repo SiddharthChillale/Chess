@@ -5,6 +5,6 @@
 class Knight : public Piece
 {
 public:
-	Knight( class Cell& cell, bool in_isLightSide );
+	Knight( class Player& in_player );
 	void Move( class Board& brd ) override;
 };

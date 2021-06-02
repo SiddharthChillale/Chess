@@ -9,8 +9,14 @@
 
 Board::Board( const Location& loc, int dimenstion )
 	:
-	arr( loc, dimenstion )
+	arr( loc, dimenstion ),
+	light( Player::Side::Light ),
+	dark( Player::Side::Dark )
 {
+	const bool lightPlayer = true;
+	const bool darkPlayer = !lightPlayer;
+	PutPieces( light, lightPlayer );
+	PutPieces( dark, darkPlayer );
 }
 
 void Board::Draw( Graphics& gfx ) const
@@ -36,6 +42,7 @@ bool Board::GetCurrentTurn() const
 
 void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 {
+	Player* current_player = isLightSideMove ? &light : &dark;
 	if( isReleasedLeft && mouse.LeftIsPressed() && arr.MouseIsOnArray( mouse ) )
 	{
 		isReleasedLeft = false;
@@ -57,12 +64,40 @@ void Board::ProcessInput( const Graphics& gfx, const Mouse& mouse )
 			arr.Select( cell_to_select );
 			const int current_cell = 0;
 			const int next_cell = 1;
-			Cell::PerformMovement( *this );
+			current_player->Move( *this, arr.GetSelected( current_cell ).piece );
 		}
 	}
 	if( !mouse.LeftIsPressed() )
 	{
 		isReleasedLeft = true;
+	}
+}
+
+void Board::PutPieces( Player& player, bool isLightSide )
+{
+
+	int firstRow;
+	int secondRow;
+	if( isLightSide )
+	{
+		firstRow = 6;
+		secondRow = 7;
+	}
+	else
+	{
+		firstRow = 1;
+		secondRow = 0;
+	}
+	int piece_idx = 0;
+	const int incr_val = secondRow - firstRow;
+	for( int i = firstRow; i != firstRow + 2 * incr_val; i += incr_val )
+	{
+		for( int j = 0; j < arr.dimension1; j++ )
+		{
+			Cell& cell = arr[Location( j, i )];
+			player.SharePiece( cell, piece_idx );
+			piece_idx++;
+		}
 	}
 }
 
@@ -131,7 +166,7 @@ const Cell& Board::GetCell( const Location& locIdx ) const
 
 Location Board::GetMoveVec( const Location& current, const Location& next )
 {
-	const Location move_vec = (next - current) / Cell::dimension;
+	const Location move_vec = next - current;
 	return move_vec;
 }
 

@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Location.h"
 #include "Piece.h"
+#include "Player.h"
 #include <memory>
 
 class Cell

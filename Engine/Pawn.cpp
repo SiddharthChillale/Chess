@@ -3,9 +3,9 @@
 #include "Board.h"
 #include <cassert>
 
-Pawn::Pawn( Cell& cell, bool in_isLightSide )
+Pawn::Pawn( Player& in_player )
 	:
-	Piece( cell, in_isLightSide )
+	Piece( in_player )
 {
 }
 
@@ -43,7 +43,6 @@ void Pawn::Move( Board& brd )
 					Cell& enPasant = brd.GetCell( target );
 					cell->MovePieceTo( next_cell );
 					enPasant.RemovePiece();
-					enPasant.RecordDeath();
 					brd.SetNextSideMove();
 				}
 			}

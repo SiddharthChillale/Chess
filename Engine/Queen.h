@@ -5,6 +5,6 @@
 class Queen : public Piece
 {
 public:
-	Queen( class Cell& cell, bool in_isLightSide );
+	Queen( class Player& in_player );
 	void Move( class Board& brd ) override;
 };

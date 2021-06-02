@@ -4,13 +4,15 @@
 #include "Board.h"
 #include <cassert>
 
-Piece::Piece( Cell& in_cell, bool in_isLightSide )
-	:
-	cell( &in_cell ), 
-	isLightSide( in_isLightSide ),
-	c( in_isLightSide ? lightSideColor : darkSideColor )
+Piece::Piece( Player& in_player )
 {
-	
+	owner = &in_player;
+	c = owner->IsLightSide() ? lightSideColor : darkSideColor;
+}
+
+void Piece::OccupyCell( Cell* in_cell )
+{
+	cell = in_cell;
 }
 
 void Piece::Draw( Graphics& gfx) const
@@ -22,12 +24,7 @@ void Piece::Draw( Graphics& gfx) const
 
 bool Piece::PieceSide() const
 {
-	return isLightSide;
-}
-
-void Piece::RecordDeath()
-{
-	isAlive = false;
+	return owner->IsLightSide();
 }
 
 void Piece::TurnOffEnPasant()
@@ -42,12 +39,12 @@ bool Piece::IsEnPasant() const
 
 bool Piece::IsAlive() const
 {
-	return isAlive;
+	return cell;
 }
 
 bool Piece::IsLightSide() const
 {
-	return isLightSide;
+	return owner->IsLightSide();
 }
 
 bool Piece::IsMoved() const

@@ -1,9 +1,9 @@
 #include "Queen.h"
 #include "Board.h"
 
-Queen::Queen( class Cell& cell, bool in_isLightSide )
+Queen::Queen( Player& in_player )
 	:
-	Piece( cell, in_isLightSide )
+	Piece( in_player )
 {
 }
 

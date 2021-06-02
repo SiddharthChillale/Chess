@@ -1,9 +1,9 @@
 #include "Rook.h"
 #include "Board.h"
 
-Rook::Rook( class Cell& cell, bool in_isLightSide )
+Rook::Rook( Player& in_player )
 	:
-	Piece( cell, in_isLightSide )
+	Piece( in_player )
 {
 }
 

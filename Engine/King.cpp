@@ -1,9 +1,9 @@
 #include "King.h"
 #include "Board.h"
 
-King::King( Cell& cell, bool in_isLightSide )
+King::King( Player& in_player )
 	:
-	Piece( cell, in_isLightSide )
+	Piece( in_player )
 {
 }
 

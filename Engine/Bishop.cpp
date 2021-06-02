@@ -1,9 +1,9 @@
 #include "Bishop.h"
 #include "Board.h"
 
-Bishop::Bishop( Cell& cell, bool in_isLightSide )
+Bishop::Bishop( Player& in_player )
 	:
-	Piece( cell, in_isLightSide )
+	Piece( in_player )
 {
 }
 

@@ -6,8 +6,9 @@
 class Piece
 {
 public:
-	Piece( class Cell& cell, bool in_isLightSide);
+	Piece( class Player& in_player );
 	virtual void Move( class Board& brd ) = 0;
+	void OccupyCell( class Cell* in_cell );
 	void Draw( Graphics& gfx) const;
 	bool PieceSide() const;
 	bool IsEnPasant() const;
@@ -18,10 +19,9 @@ public:
 	void RecordDeath();
 	void TurnOffEnPasant();
 protected:
-	Cell* cell;
-	const bool isLightSide;
-	const Color c;
-	bool isAlive = true;
+	Cell* cell = nullptr;
+	const Player* owner;
+	Color c;
 	bool isMoved = false;
 	bool isEnPasant = false;
 	static constexpr Color lightSideColor = Color( 186, 202, 68 );

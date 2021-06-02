@@ -29,7 +29,7 @@ public:
 public:
 	static constexpr Color lightCell = Color( 238, 238, 210 );
 	static constexpr Color darkCell = Color( 118, 150, 86 );
-	static constexpr Color selectedCell = Color( 0, 0, 255 );
+	static constexpr Color colorSelectedCell = Color( 0, 0, 255 );
 	const int dimension0;
 	const int dimension1;
 	const Location location;
