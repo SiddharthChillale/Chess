@@ -57,7 +57,7 @@ void CellArray::Draw( Graphics& gfx ) const
 
 bool CellArray::MouseIsOnArray( const Mouse& mouse ) const
 {
-	const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() );
+	const Location mouse_loc = Location( mouse.GetPosX(), mouse.GetPosY() ) - location;
 	const Location right_bottom = Location( dimension0, dimension1 ) * Cell::dimension;
 	return mouse_loc.x >= location.x &&
 		mouse_loc.x <= right_bottom.x &&
