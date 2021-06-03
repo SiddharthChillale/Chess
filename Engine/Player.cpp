@@ -6,6 +6,7 @@
 #include "Bishop.h"
 #include "Queen.h"
 #include "King.h"
+#include <cassert>
 
 Player::Player( Side side )
 {
@@ -39,9 +40,10 @@ void Player::Move( Board& brd, std::shared_ptr<Piece> piece )
 	piece->Move( brd );
 }
 
-bool Player::isLastMoved( const std::shared_ptr<Piece> piece )
+bool Player::isLastMoved( const Piece& piece ) const
 {
-	return piece == movedPiece;;
+	assert( movedPiece );
+	return piece == *movedPiece;
 }
 
 bool Player::IsLightSide() const

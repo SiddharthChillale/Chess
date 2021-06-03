@@ -15,7 +15,7 @@ public:
 	Player( Side side );
 	void SharePiece( Cell& cell, int idx );
 	void Move( class Board& brd, std::shared_ptr<Piece> piece );
-	bool isLastMoved( const std::shared_ptr<Piece> piece );
+	bool isLastMoved( const Piece& piece ) const;
 	bool IsLightSide() const;
 private:
 	bool isLightSide;

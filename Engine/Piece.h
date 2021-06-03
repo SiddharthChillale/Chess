@@ -16,8 +16,8 @@ public:
 	bool IsLightSide() const;
 	bool IsMoved() const;
 	void RecordMove();
-	void RecordDeath();
 	void TurnOffEnPasant();
+	bool operator==( const Piece& rhs )const;
 protected:
 	Cell* cell = nullptr;
 	const Player* owner;

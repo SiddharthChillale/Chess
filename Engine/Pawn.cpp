@@ -67,6 +67,7 @@ void Pawn::Move( Board& brd )
 	}
 	if( nextTurn )
 	{
+		RecordMove();
 		brd.DeselectAllCells();
 	}
 }

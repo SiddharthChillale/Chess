@@ -33,9 +33,14 @@ void Piece::TurnOffEnPasant()
 	isEnPasant = false;
 }
 
+bool Piece::operator==( const Piece& rhs ) const
+{
+	return cell == rhs.cell;
+}
+
 bool Piece::IsEnPasant() const
 {
-	return isEnPasant;
+	return isEnPasant && owner->isLastMoved( *this );
 }
 
 bool Piece::IsAlive() const

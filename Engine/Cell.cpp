@@ -46,7 +46,6 @@ void Cell::RemovePiece()
 
 void Cell::MovePieceTo( Cell& nxt_pos )
 {
-	piece->RecordMove();
 	assert( piece );
 	if( nxt_pos.piece )
 	{
